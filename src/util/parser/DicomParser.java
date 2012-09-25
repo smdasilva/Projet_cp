@@ -4,10 +4,15 @@ import java.util.List;
 
 public class DicomParser implements Parser {
 
+    private String extension;
+    
+    public DicomParser() {
+	extension = "dcm";
+    }
+    
     @Override
     public String getExtension() {
-	// TODO Auto-generated method stub
-	return null;
+	return extension;
     }
 
     @Override
