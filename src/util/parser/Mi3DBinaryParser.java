@@ -4,10 +4,15 @@ import java.util.List;
 
 public class Mi3DBinaryParser implements Parser {
 
+    private String extension;
+    
+    public Mi3DBinaryParser() {
+	extension = "bmi3d";
+    }
+    
     @Override
     public String getExtension() {
-	// TODO Auto-generated method stub
-	return null;
+	return extension;
     }
 
     @Override
