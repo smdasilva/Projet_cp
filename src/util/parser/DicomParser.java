@@ -21,9 +21,9 @@ public class DicomParser implements Parser {
 	
     }
 
+    /** Not supported */
     @Override
     public boolean saveFile(String filename, Examen exam, List<Boolean> options) {
-	// TODO Auto-generated method stub
 	return false;
     }
 
