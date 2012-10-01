@@ -1,5 +1,6 @@
 package util.parser;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import com.pixelmed.dicom.Attribute;
 import com.pixelmed.dicom.AttributeList;
 import com.pixelmed.dicom.AttributeTag;
 import com.pixelmed.dicom.TagFromName;
+import com.pixelmed.display.SourceImage;
 
 public class DicomParser implements Parser {
 
@@ -86,6 +88,12 @@ public class DicomParser implements Parser {
                 }
             }
         }
+        
+        //TODO call examen.setParameters() with the right values
+        
+        // Affectation de l'image
+        SourceImage img = new SourceImage(list);
+        BufferedImage buffImg = img.getBufferedImage();
     }
 
     /** Not supported */
