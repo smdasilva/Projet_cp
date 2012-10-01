@@ -1,57 +1,56 @@
 package util.parser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import org.dcm4che2.data.DicomElement;
-import org.dcm4che2.data.DicomObject;
-import org.dcm4che2.data.Tag;
-import org.dcm4che2.io.DicomInputStream;
+import com.pixelmed.dicom.Attribute;
+import com.pixelmed.dicom.AttributeList;
+import com.pixelmed.dicom.AttributeTag;
+import com.pixelmed.dicom.TagFromName;
 
 public class DicomParser implements Parser {
 
     private enum DicomTags {
-        PatientName("Patient Name", Tag.PatientName),
-        PatientID("Patient ID", Tag.PatientID),
-        PatientBirthDate("Patient birthday", Tag.PatientBirthDate),
-        PatientAge("Patient age", Tag.PatientAge),
-        PatientSex("Patient sex", Tag.PatientSex),
-        PatientSize("Patient size", Tag.PatientSize),
-        PatientWeight("Patient weight", Tag.PatientWeight),
-        ImagePositionPatient("Image position patient", Tag.ImagePositionPatient),
-        ImageOrientationPatient("Image orientation patient", Tag.ImageOrientationPatient),
-        StudyID("Study data", Tag.StudyID),
-        StudyDate("Study date", Tag.StudyDate),
-        StudyTime("Study time", Tag.StudyTime),
-        StudyDescription("Study description", Tag.StudyDescription),
-        BitsAllocated("Bits allocated", Tag.BitsAllocated),
-        BitsStored("Bits stored", Tag.BitsStored),
-        HighBit("High bit", Tag.HighBit),
-        RescaleIntercept("Intercept", Tag.RescaleIntercept),
-        RescaleSlope("Slope", Tag.RescaleSlope),
-        WindowCenter("Window center", Tag.WindowCenter),
-        WindowWidth("Window width", Tag.WindowWidth),
-        SliceThickness("Slice thickness", Tag.SliceThickness),
-        WindowCenterWidthExplanation("WindowCenterWidthExplanation", Tag.WindowCenterWidthExplanation);
-        
-        private final int tag;
+        PatientName("Patient Name", TagFromName.PatientName),
+        PatientID("Patient ID", TagFromName.PatientID),
+        PatientBirthDate("Patient birthday", TagFromName.PatientBirthDate),
+        PatientAge("Patient age", TagFromName.PatientAge),
+        PatientSex("Patient sex", TagFromName.PatientSex),
+        PatientSize("Patient size", TagFromName.PatientSize),
+        PatientWeight("Patient weight", TagFromName.PatientWeight),
+        ImagePositionPatient("Image position patient", TagFromName.ImagePositionPatient),
+        ImageOrientationPatient("Image orientation patient", TagFromName.ImageOrientationPatient),
+        StudyID("Study data", TagFromName.StudyID),
+        StudyDate("Study date", TagFromName.StudyDate),
+        StudyTime("Study time", TagFromName.StudyTime),
+        StudyDescription("Study description", TagFromName.StudyDescription),
+        BitsAllocated("Bits allocated", TagFromName.BitsAllocated),
+        BitsStored("Bits stored", TagFromName.BitsStored),
+        HighBit("High bit", TagFromName.HighBit),
+        RescaleIntercept("Intercept", TagFromName.RescaleIntercept),
+        RescaleSlope("Slope", TagFromName.RescaleSlope),
+        WindowCenter("Window center", TagFromName.WindowCenter),
+        WindowWidth("Window width", TagFromName.WindowWidth),
+        SliceThickness("Slice thickness", TagFromName.SliceThickness),
+        WindowCenterWidthExplanation("WindowCenterWidthExplanation", TagFromName.WindowCenterWidthExplanation);
+
+        private final AttributeTag tag;
         private final String name;
-        
-        DicomTags(String name, int tag) {
+
+        DicomTags(String name, AttributeTag tag) {
             this.name = name;
             this.tag = tag;
         }
-        
-        int getTag() {
+
+        AttributeTag getTag() {
             return tag;
         }
-        
+
         String getName() {
             return name;
         }
     }
-    
+
     private final String extension;
 
     public DicomParser() {
@@ -65,32 +64,27 @@ public class DicomParser implements Parser {
 
     @Override
     public void loadFile(String filename, Examen exam) {
-        // reading dicom object from file
-        DicomObject dicom;
-        DicomInputStream stream = null;
-        try {
-            stream = new DicomInputStream(new File(filename));
-            dicom = stream.readDicomObject();
-        } catch (IOException io) {
-            return;
-        } finally {
-            try {
-                stream.close();
-            }
-            catch (IOException ignore) {
-            }
-        }
-
+        File dicomFile = new File(filename);
+        Information generalInfos = exam.getInformations();
         boolean firstFlag = false;
 
-        // reading informations
-        Information generalInfos = exam.getInformations();
-        if (generalInfos.getSize() == 0) {
+        // reading dicom Attributes from file
+        AttributeList list = new AttributeList();
+        list.read(dicomFile);
+        if (generalInfos.size() == 0) {
             firstFlag = true;
-        }
-        
-        for (DicomTags tag : DicomTags.values()) {
-            generalInfos.addInformation(tag.getName(), dicom.getString(tag.getTag()));
+            for (DicomTags tag : DicomTags.values()) {
+                Attribute attr = list.get(tag.getTag());
+                if (attr != null) {
+                    StringBuilder buffer = new StringBuilder();
+                    for (String s : attr.getStringValues()) {
+                        buffer.append(s);
+                    }
+                    generalInfos.addInformations(tag.getName(), buffer.toString());
+                } else {
+                    generalInfos.addInformation(tag.getName(), "null");
+                }
+            }
         }
     }
 
