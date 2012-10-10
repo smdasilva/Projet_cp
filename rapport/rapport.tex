@@ -1,0 +1,119 @@
+\documentclass[a4paper, oneside, 10pt]{book}
+
+\usepackage{fancyhdr,verbatim, listings, color} 
+%\usepackage{shorttoc}
+%\usepackage[french]{minitoc}
+\usepackage[pdftex]{graphicx} 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{url}
+
+\definecolor{colKeys}{rgb}{0,0,1} 
+\definecolor{colIdentifier}{rgb}{0,0,0} 
+\definecolor{colComments}{rgb}{0,0.5,1} 
+\definecolor{colString}{rgb}{0.6,0.1,0.1} 
+
+\usepackage[pdftex,
+    bookmarks         = true,
+    bookmarksnumbered = true,
+    bookmarks = true, 
+    pdfstartview      = FitH,
+    bookmarksopen = true, 
+    bookmarksopenlevel = 1, 
+    colorlinks        = false,
+    urlcolor          = red,
+    pdfborder         = {0 0 0}
+    ]{hyperref}
+\hypersetup{
+    pdfauthor   = {Clément Badiola, Alexandre Perrot, Samuel Da Silva, Reda Liazidi},% 
+    pdftitle    = {Conduite_projet},%
+    pdfsubject  = {Réalisation d'une IHM sur tablette tactile},% 
+    pdfkeywords = {},% 
+    pdfcreator  = {PDFLaTeX},% 
+    pdfproducer = {PDFLaTeX}} 
+
+\lstset{
+float=hbp,
+basicstyle=\ttfamily\small,
+identifierstyle=\color{colIdentifier},
+keywordstyle=\color{colKeys},
+stringstyle=\color{colString},
+commentstyle=\color{colComments},
+%language=c,
+columns=flexible,
+tabsize=2,
+frame=trBL,
+frameround=tttt,
+extendedchars=true,
+showspaces=false,
+showstringspaces=false,
+numbers=left,
+numberstyle=\tiny,
+breaklines=true,
+breakautoindent=true,
+captionpos=b,
+commentstyle=\textit
+}
+
+
+\author{Clément~\textsc{Badiola} \and Alexandre~\textsc{Perrot} \and Samuel~\textsc{Da~Silva} \and Reda~\textsc{Liazidi}  \and \\
+  Client : Hugo~\textsc{Balacey} \\
+  }
+\title{Réalisation d'une IHM sur tablette tactile}
+\date{08 Octobre 2012}
+
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\ttfamily}}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
+
+\pagestyle{fancy} 
+
+\begin{document}
+
+\fancyhf{} 
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}} 
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}} 
+\fancyhead[R]{\bfseries\thepage}% Left Even, Right Odd - No de page 
+\fancyhead[L]{\bfseries\rightmark} % Left Odd - Titre section 
+\renewcommand{\headrulewidth}{0.5pt}% filet en haut de page 
+\addtolength{\headheight}{0.5pt} % espace pour le filet 
+\renewcommand{\footrulewidth}{0pt} % pas de filet en bas 
+\fancypagestyle{plain}{ % pages de tetes de chapitre 
+\fancyhead{} % supprime lentete 
+\renewcommand{\headrulewidth}{0pt} % et le filet 
+}
+
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyfoot[C]{\thepage}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}}
+
+%\dominitoc
+%\dopartoc
+
+\maketitle
+
+\frontmatter
+\tableofcontents
+
+\mainmatter
+
+\input{chapters/preparation}
+\input{chapters/archi}
+\input{chapters/tests}
+
+\appendix
+
+\backmatter
+
+\bibliographystyle{plain-fr}
+%\bibliography{../refs}
+
+\end{document}
