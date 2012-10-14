@@ -1,12 +1,41 @@
-\chapter{Prépation/Mise en Oeuvre}
+\chapter{Préparation / Mise en Œuvre} %Trouver un titre plus accrocheur, plus pertinant
+Le projet DIAMS a nécessité le déploiement et l'utilisation de nombreux outils et méthodes : aide à la gestion,
+tests, analyse de code, versionnage, communications et conventions. Certaines fonctionnalités de DIAMS sont basées sur des bibliothèques externes ou sur d'autres applications. Nous détaillons ici le déroulement de ce qui constitue l'étape préliminaire du projet.
 
-\section{Serveurs}
+\section{Suivi de projet}
+%Youkan, comment on le rempli ensembles, comment on valide avec le client, comment on vote les coûts.
+%Jazz d'IBM, comment on l'a vu mais pas utilisé car payant.
+%Listes de diffusion mail, convention [PCP] pour filtrer...
+%Réunions scrum, dire comme on en fait souvent pour faire le point. Comment on gère les risques (anticipation, priorité, contournement/solutions possibles). Comment on distribue les tâches, basé sur le volontariat.
+%Réunions client, comment on fait le pont avec lui, comment on l'implique dans le projet.
 
-- Automatisation
+\section{Environnement de développement intégré}
+%Eclipse, ADT, SDK, DDMS (pour le debug)
+%Préciser qu'on utilise des OS différents. Donc justification d'Eclipse car c'est multiplateforme et que c'est pratique pour coder en android.
+%Préciser le SDK utilisé, car contraintes matérielles avec la tablette huawei.
+%Mentionner la rédaction et l'utilisation des conventions de codage.
 
-\section{Analyses}
+\section{Outils de versionnage}
+%Git, GitHub. Justifier de son utilisation par le fait que c'est basé sur du "chacun a son répo.", plus robuste donc. Permet de réduire les risques --> (à mettre en gras souligné lol).
+%Smartgit, visuel, répos locaux/à distance, diff et log visuels.
+%Conventions push/pull. Genre le scrum master seul peut pusher sur la branche master. Tout le monde pull puis push. On fait des branches de tests/intégration pour différencier produit stable de snapshot de dév.
 
-- Code
-- Fuite mémoire
+\section{Serveurs d'automatisation}
 
-\section{Bibliothèque}
+\subsection{Maven : déploiement et dépendances}
+%Maven, pourquoi on voulait l'utiliser, pourquoi on ne l'a pas utilisé au final.
+%Quelles sont les alternatives utilisées (donc, comment nous avons surmonté le risque posé par l'absence de Maven). Utilisation du générateur d'apk de google fourni de base dans ADT. Dépendances gérées à la main, pas grave car petit projet.
+
+\subsection{Jenkins : tests et compilation}
+%Jenkins
+
+\section{Analyse de code}
+%Pas besoin d'outil d'analyse de fuites mémoire, c'est du garbage collector.
+\subsection{Sonar}
+%Sonar, outil puissant avec frontend web pour la gestion qualité à l'aide de l'analyse du code. Basé sur Maven donc abandonné.
+\subsection{Lint}
+%Détecte certaines erreurs de conception et donne des conseils pour avoir un code de meilleur qualité. Outil android. Correctness, Usability, security, accessibility, performance (je cite la page google).
+
+\section{Bibliothèques}
+%dcm4che, pourquoi c'était bien, pourquoi c'est pas possible.
+%pixelmed, pourquoi c'est génial, ce qu'on ne peut pas utiliser pour cause d'incompatibilité. Les conséquences sur le projet.
