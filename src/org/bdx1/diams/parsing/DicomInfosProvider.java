@@ -13,10 +13,21 @@ import com.pixelmed.dicom.DicomException;
 
 public class DicomInfosProvider implements InformationProvider {
 
-    private static List<DicomTags> patientTags =
+    private static final List<DicomTags> patientTags =
             Arrays.asList(DicomTags.PatientName, DicomTags.PatientAge, DicomTags.PatientID,
                     DicomTags.PatientBirthDate, DicomTags.PatientSex, DicomTags.PatientSize,
                     DicomTags.PatientWeight);
+    
+    private static final List<DicomTags> studyTags =
+            Arrays.asList(DicomTags.StudyDate, DicomTags.StudyDescription,
+                    DicomTags.StudyID, DicomTags.StudyTime,
+                    DicomTags.ImageOrientationPatient, DicomTags.ImagePositionPatient);
+    
+    private static final List<DicomTags> sliceTags = 
+            Arrays.asList(DicomTags.BitsAllocated, DicomTags.BitsStored, DicomTags.HighBit,
+                    DicomTags.RescaleIntercept, DicomTags.RescaleSlope, DicomTags.SliceThickness,
+                    DicomTags.WindowCenter, DicomTags.WindowWidth,
+                    DicomTags.WindowCenterWidthExplanation);
 
     private AttributeList attributes = new AttributeList();
 
@@ -24,23 +35,11 @@ public class DicomInfosProvider implements InformationProvider {
     }
 
     public Map<String, String> getPatientInfos() {
-        Map<String, String> map = new HashMap<String, String>();
-
-        for (DicomTags tag : patientTags) {
-            Attribute value = attributes.get(tag.getTag());
-            if (value != null) {
-                String stringValue = value.getSingleStringValueOrNull();
-                map.put(tag.getName(), stringValue);
-            } else {
-                map.put(tag.getName(), "null");
-            }
-        }
-
-        return map;
+        return getMapOfTags(patientTags);
     }
 
     public Map<String, String> getSliceInfos() {
-        return null;
+        return getMapOfTags(sliceTags);
     }
 
     public boolean read(File target) {
@@ -54,4 +53,19 @@ public class DicomInfosProvider implements InformationProvider {
         return true;
     }
 
+    private Map<String,String> getMapOfTags(List<DicomTags> list) {
+        Map<String, String> map = new HashMap<String, String>();
+
+        for (DicomTags tag : list) {
+            Attribute value = attributes.get(tag.getTag());
+            if (value != null) {
+                String stringValue = value.getSingleStringValueOrNull();
+                map.put(tag.getName(), stringValue);
+            } else {
+                map.put(tag.getName(), "null");
+            }
+        }
+
+        return map;
+    }
 }
