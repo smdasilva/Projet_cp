@@ -68,4 +68,8 @@ public class DicomInfosProvider implements InformationProvider {
 
         return map;
     }
+
+    public Map<String, String> getStudyInfos() {
+        return getMapOfTags(studyTags);
+    }
 }
