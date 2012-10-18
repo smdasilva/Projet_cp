@@ -8,5 +8,6 @@ public interface InformationProvider {
     public boolean read(File target);
     public Map<String, String> getPatientInfos();
     public Map<String, String> getSliceInfos();
+    public Map<String, String> getStudyInfos();
     
 }
