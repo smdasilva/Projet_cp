@@ -18,7 +18,7 @@ public class InformationProviderTest {
     private static final Map<String,String> expectedSliceInfos = new HashMap();
     private static final Map<String, String> expectedStudyInfos = new HashMap();
     
-    private static final File dcmFile = new File("test/resources/1.3.12.2.1107.5.1.4.50152.4.0.9805533212151202 copie.dcm");
+    private static final File dcmFile = new File("test/resources/dicomTest2.dcm");
     private InformationProvider provider;
     
     @BeforeClass
