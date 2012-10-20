@@ -26,41 +26,77 @@ sur l'environnement de travail, commun à tous.
 %%Réunions client, comment on fait le point avec lui, comment on l'implique dans le projet.
 
 \section{Environnement de développement intégré}
-Le choix de l'IDE fut simple et rapide, en effet Eclipse est la référence pour le développement sous android, de plus il est multi-plateforme,
+Le choix de l'IDE fut simple et rapide, en effet Eclipse est la référence pour le développement sous Android, de plus il est multi-plateforme,
 en effet chaque membre n'utilise pas le même OS ce qui est d'autant plus pratique.
 Son plugin fournit tout le kit de développement, nous utilisons aussi le DDMS (Dalvik Debug Monitor Server) nous permettant de détecter et de résoudre
 des bugs. \\
 Une convention de codage a été mise en place pour assurer une plus grande cohérence entre les membres, cette convention est partie intégrante de la
 documentation développeur.
-Une tablette tactile nous a été prêté, cette tablette a la version d'android 2.1(API 7), n'étant pas la plus récente cela nous impose de nous adapter à
-cette version, par conséquent certains services ne sont pas accessibles.
+Une tablette tactile nous a été prêté, cette tablette a la version d'Android 2.1(API 7), n'étant pas la plus récente cela nous impose de nous adapter à
+cette version, par conséquent certains services ne sont pas accessibles. \\
+De plus le travail en équipe nécessite des outils de versions.
 %le fichier de convention je le cite dans la biblio ?
 %%Eclipse, ADT, SDK, DDMS (pour le debug)
-%%Préciser qu'on utilise des OS différents. Donc justification d'Eclipse car c'est multiplateforme et que c'est pratique pour coder en android.
+%%Préciser qu'on utilise des OS différents. Donc justification d'Eclipse car c'est multiplateforme et que c'est pratique pour coder en Android.
 %%Préciser le SDK utilisé, car contraintes matérielles avec la tablette huawei.
 %%Mentionner la rédaction et l'utilisation des conventions de codage.
 
 \section{Outils de version}
-%Git, GitHub. Justifier de son utilisation par le fait que c'est basé sur du "chacun a son répo.", plus robuste donc. Permet de réduire les risques --> (à mettre en gras souligné lol).
+Le code est versionné sous git, ainsi chacun a son propre serveur, cela réduit les \textbf{risques de conflits} et pour le serveur central nous avons choisi 
+d'utiliser GitHub. Il nous offre un bugtracker, pour un meilleur suivi du projet et une bonne visualisation sous forme de graphes de notre arborescence
+du dépôt. Nous utilisons Smartgit, ce logiciel offre une interface graphique pour utiliser plus facilement git.
+Pour versionner nous utilisons la méthode \textbf{PULL}, ce qui signifie que seul le \textbf{Scrum Master} a le droit d'envoyer sa version sur la branche
+master (branche principale), les autres membres envoient leur version sur d'autres branches, mais seul le scrum master peut réaliser des fusions entre 
+d'autre(s) branche(s) et la master, les autres développeurs ne peuvent que le demander. Ce système de branche représente sépare ce qui est en développement 
+de ce qui est en phase d'intégration, cette arborescence représente aussi la répartition des tâches.
+Afin de faciliter la mise en place et le travail nous avons décidé d'utiliser des outils d'automatisation.
+%%Git, GitHub. Justifier de son utilisation par le fait que c'est basé sur du "chacun a son répo.", plus robuste donc. Permet de réduire les risques --> (à 
+%%mettre en gras souligné lol).
 %Smartgit, visuel, répos locaux/à distance, diff et log visuels.
-%Conventions push/pull. Genre le scrum master seul peut pusher sur la branche master. Tout le monde pull puis push. On fait des branches de tests/intégration pour différencier produit stable de snapshot de dév.
+%%Conventions push/pull. Genre le scrum master seul peut pusher sur la branche master. Tout le monde pull puis push. On fait des branches de 
+%%tests/intégration pour différencier produit stable de snapshot de dév.
 
 \section{Serveurs d'automatisation}
 
 \subsection{Maven : déploiement et dépendances}
-%Maven, pourquoi on voulait l'utiliser, pourquoi on ne l'a pas utilisé au final.
-%Quelles sont les alternatives utilisées (donc, comment nous avons surmonté le risque posé par l'absence de Maven). Utilisation du générateur d'apk de google fourni de base dans ADT. Dépendances gérées à la main, pas grave car petit projet.
+Maven est un outil permettant d'automatiser la mise en place d'un projet en Java, en particulier cela gère les dépendances entre les librairies, d'où
+le souhait de l'utiliser. Cependant suite à des problèmes d'incompatibilité entre la version d'Android utilisée, nous avons du renoncé à l'utiliser.
+L'alternative utilisée est via Ant et l'APK de Google (Application Package File) permettant d'installer des logiciels sous Android,
+et les dépendances sont gérées manuellement, ceci ne pose pas de grands soucis car le nombre de dépendance est faible.
+L'automatisation concerne aussi les tests.
+%%Maven, pourquoi on voulait l'utiliser, pourquoi on ne l'a pas utilisé au final.
+%%Quelles sont les alternatives utilisées (donc, comment nous avons surmonté le risque posé par l'absence de Maven). Utilisation du générateur d'apk de 
+%google fourni de base dans ADT. Dépendances gérées à la main, pas grave car petit projet.
 
 \subsection{Jenkins : tests et compilation}
-%Jenkins
+Jenkins est un outil permettant via un serveur de réaliser automatiquement des tests, ainsi à chaque commit Jenkins exécutent les tests et nous retourne
+un compte-rendu en cas d'erreur, ou si tous les tests ont réussi, mettre en place Jenkins a nécessité du temps pour prendre en main ce nouvel outil,
+toutefois cela restait en local, un serveur a été mis en place au CREMI,cependant il est configuré sur le serveur Savane donc il faudra utiliser svn.
+Un outil d'analyse de code serait un complément à l'outil Jenkins.
+
 
 \section{Analyse de code}
-%Pas besoin d'outil d'analyse de fuites mémoire, c'est du garbage collector.
+
+Le projet est en Java, par conséquent le garbage collector gère la mémoire, toutefois étant donné que l'application doit 
+fonctionner sur une tablette, il est nécessaire d'éviter de surcharger la mémoire (ouvrir trop de fichiers en même temps, ...)
 \subsection{Sonar}
-%Sonar, outil puissant avec frontend web pour la gestion qualité à l'aide de l'analyse du code. Basé sur Maven donc abandonné.
+Sonar outil puissant permettant une analyse poussée du code, (duplications de code, détection de bugs,...), cependant il est basé sur Maven par conséquent
+on ne peut l'utiliser. Ainsi nous nous sommes orienté vers un autre outil.
+%%Sonar, outil puissant avec frontend web pour la gestion qualité à l'aide de l'analyse du code. Basé sur Maven donc abandonné.
 \subsection{Lint}
-%Détecte certaines erreurs de conception et donne des conseils pour avoir un code de meilleur qualité. Outil android. Correctness, Usability, security, accessibility, performance (je cite la page google).
+Lint permet la détection des erreurs de conception, (exemple: des namespaces dans un fichier xml non inutilisés), précise si des éléments sont
+dépréciés par rapport à l'API visé, le but étant d'améliorer la lisibilité, la sécurité, la performance ...
+%%Détecte certaines erreurs de conception et donne des conseils pour avoir un code de meilleur qualité. Outil Android. Correctness, Usability, security, 
+%%accessibility, performance (je cite la page google).
 
 \section{Bibliothèques}
-%dcm4che, pourquoi c'était bien, pourquoi c'est pas possible.
-%pixelmed, pourquoi c'est génial, ce qu'on ne peut pas utiliser pour cause d'incompatibilité. Les conséquences sur le projet.
+Pour ce projet nous nous sommes intéressé à des librairies offrant un grand nombre de fonctionnalités que dont nous avons besoin,
+(parser d'image,d'informations, gestionnaire de fichiers, traitement d'image ...), ainsi deux libraires ont retenu notre attention.
+\begin{itemize}
+\item[\textbf{dcm4che:}]  est un projet open source en Java sur la médecine notamment la gestion des DICOM, cependant il utilise l'API Swing
+étant incompatible avec Android.
+\item[\textbf{pixelmed:}] projet oprn source offrant la gestion de DICOM et de traitement d'image, mais utilise l'API awt tout aussi incompatible sous 
+Android.
+\end{itemize}
+%%dcm4che, pourquoi c'était bien, pourquoi c'est pas possible.
+%%pixelmed, pourquoi c'est génial, ce qu'on ne peut pas utiliser pour cause d'incompatibilité. Les conséquences sur le projet.
