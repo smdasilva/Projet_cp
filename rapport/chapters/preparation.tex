@@ -6,97 +6,76 @@ fonctionnalités de DIAMS sont basées sur des bibliothèques externes ou sur d'
 Nous détaillons ici le déroulement de ce qui constitue l'étape préliminaire du projet.
 
 \section{Suivi de projet}
-L'organisation du projet se fait selon la méthode Scrum, ainsi nous utilisons l'outil
-Youkan, nous avons voulu utiliser l'outil Jazz d'IBM mais nous avons du renoncé car il était payant.
-Cet outil nous permet de nous organiser, en nous permettant de rédiger les User Stories,
-les différentes tâches. Chaque tâche est pondéré, le nombre de points par tâche est choisi
-par un vote, de plus Youkan est accessible par le client et ainsi il peut suivre l'avancement du
-projet. La répartition du travail est basé sur le volontariat, chaque semaine il y a entre 3 et quatre
-réunions afin de discuter de l'avancement (difficultés rencontrées, choix d'une API, framework,...),
-et une fois par semaine une réunion avec le client a lieu pour faire le point sur l'avancement du projet.\\
-Afin d'éviter tout litige d'incompatibilité entre les outils utilisé nous nous sommes mis d'accord
-sur l'environnement de travail, commun à tous.
+Le projet s'organise autour de la méthode Scrum. Pour cette méthode agile, nous utilisons l'outil
+Youkan. Nous voulions utiliser l'outil Jazz d'IBM, qui offre des fonctionnalités 
+de communication et de management très étoffées, mais nous avons dû renoncer car l'ensemble logiciel était payant.
+
 %%Youkan, comment on le rempli ensembles, comment on valide avec le client, comment on vote les coûts.
-%%Jazz d'IBM, comment on l'a vu mais pas utilisé car payant.
+\subsection{Youkan} %Screenshots please
+Youkan est une application web qui permet de s'organiser autour de User Stories,
+les différentes fonctionnalités d'un logiciel, qui sont rédigées par l'équipe.
+Ces User Stories sont découpées en tâches. Chaque tâche est pondéré par un nombre de points choisi
+lors d'un vote. Youkan est accessible par le client, lui offrant la possibilité de suivre l'avancement du
+projet. La répartition du travail est basé sur le volontariat. Chaque semaine, nous organisons entre une et deux
+réunions afin de faire le point (difficultés rencontrées, planification de risques, redistribution des tâches etc.),
+et une fois par semaine, une réunion avec le client a lieu pour affiner la liste des User stories, discuter de
+l'avancement, lister les problèmes rencontrés et l'impliquer dans le projet.\\
+Afin d'éviter tous problèmes d'incompatibilité entre les outils utilisés, nous avons choisi un environnement de développement commun à tous.
 
-%Listes de diffusion mail, convention [PCP] pour filtrer... faut vraiment mettre ça ?
-
+%Listes de diffusion mail, convention [PCP] pour filtrer... faut vraiment mettre ça ? --> Non j'ai écrit ce
+%commentaire pour le fun...
 %%Réunions scrum, dire comme on en fait souvent pour faire le point. Comment on gère les risques (anticipation, priorité, contournement/solutions possibles). 
-%%Comment on distribue les tâches, basé sur le volontariat.
-%%Réunions client, comment on fait le point avec lui, comment on l'implique dans le projet.
+\subsection{Organisation de la communication}
 
-\section{Environnement de développement intégré}
-Le choix de l'IDE fut simple et rapide, en effet Eclipse est la référence pour le développement sous Android, de plus il est multi-plateforme,
-en effet chaque membre n'utilise pas le même OS ce qui est d'autant plus pratique.
-Son plugin fournit tout le kit de développement, nous utilisons aussi le DDMS (Dalvik Debug Monitor Server) nous permettant de détecter et de résoudre
-des bugs. \\
-Une convention de codage a été mise en place pour assurer une plus grande cohérence entre les membres, cette convention est partie intégrante de la
-documentation développeur.
-Une tablette tactile nous a été prêté, cette tablette a la version d'Android 2.1(API 7), n'étant pas la plus récente cela nous impose de nous adapter à
-cette version, par conséquent certains services ne sont pas accessibles. \\
-De plus le travail en équipe nécessite des outils de versions.
-%le fichier de convention je le cite dans la biblio ?
-%%Eclipse, ADT, SDK, DDMS (pour le debug)
-%%Préciser qu'on utilise des OS différents. Donc justification d'Eclipse car c'est multiplateforme et que c'est pratique pour coder en Android.
-%%Préciser le SDK utilisé, car contraintes matérielles avec la tablette huawei.
-%%Mentionner la rédaction et l'utilisation des conventions de codage.
 
-\section{Outils de version}
-Le code est versionné sous git, ainsi chacun a son propre serveur, cela réduit les \textbf{risques de conflits} et pour le serveur central nous avons choisi 
-d'utiliser GitHub. Il nous offre un bugtracker, pour un meilleur suivi du projet et une bonne visualisation sous forme de graphes de notre arborescence
-du dépôt. Nous utilisons Smartgit, ce logiciel offre une interface graphique pour utiliser plus facilement git.
-Pour versionner nous utilisons la méthode \textbf{PULL}, ce qui signifie que seul le \textbf{Scrum Master} a le droit d'envoyer sa version sur la branche
-master (branche principale), les autres membres envoient leur version sur d'autres branches, mais seul le scrum master peut réaliser des fusions entre 
-d'autre(s) branche(s) et la master, les autres développeurs ne peuvent que le demander. Ce système de branche représente sépare ce qui est en développement 
-de ce qui est en phase d'intégration, cette arborescence représente aussi la répartition des tâches.
+\section{Environnement de développement}
+\subsection{IDE}
+Eclipse est la référence pour le développement sous Android, le système d'exploitation visé. De plus il est multi-plateforme et résout le problème de l'utilisation de différents systèmes d'exploitation par les membres de l'équipe de développement.
+Son système de plugins permet de gérer tout le kit de développement Android. Nous utilisons également le DDMS (Dalvik Debug Monitor Server), qui permet de détecter et de résoudre des bugs tout en interagissant avec le système. 
+
+\subsection{Style de codage}
+Une convention de codage a été mise en place pour assurer une plus grande cohérence au sein de l'équipe, cette convention est partie intégrante de la documentation développeur.
+
+\subsection{matériel de déploiement}
+Nous utilisons une tablette tactile pour le déploiement de notre application. Cette tablette possède la version Android 2.1(API 7), qui n'est pas la plus récente. Par conséquent, certains services récents ne sont pas accessibles. 
+%le fichier de convention je le cite dans la biblio ? --> Non.
+
+\section{Outils de versionnage}
+Le code est versionné sous git, pour que chacun dispose de son propre serveur. Cela procure l'avantage de réduire les \textbf{risques de conflits}. Le serveur web que nous avons choisi 
+d'utiliser est GitHub. Il nous propose un traqueur de bogues, un système de commentaires du code pour un meilleur suivi du projet et un outil de visualisation de l'activité du projet sous forme de graphes d'arborescences. En sur-couche graphique de git, nous utilisons le logiciel Smartgit. Il propose des outils de comparaison de code et des
+journaux visuels.
+Nous versionnons le code en utilisant la méthode \textbf{PULL then PUSH} : seul le \textbf{Scrum Master} possède le droit d'intégrer des
+sources sur la branche master (branche principale). Les autres membres envoient leurs versions sur d'autres
+branches, mais seul le scrum master peut réaliser des fusions entre d'autres branches et la branche master. Les
+autres développeurs peuvent demander une intégration de leurs modifications sur la branche principale. Nous utilisons ce système de branches pour séparer ce qui est en développement de ce qui est en phase d'intégration. L'arborescence représente aussi la répartition des fonctionnalités.
 Afin de faciliter la mise en place et le travail nous avons décidé d'utiliser des outils d'automatisation.
-%%Git, GitHub. Justifier de son utilisation par le fait que c'est basé sur du "chacun a son répo.", plus robuste donc. Permet de réduire les risques --> (à 
-%%mettre en gras souligné lol).
-%Smartgit, visuel, répos locaux/à distance, diff et log visuels.
-%%Conventions push/pull. Genre le scrum master seul peut pusher sur la branche master. Tout le monde pull puis push. On fait des branches de 
-%%tests/intégration pour différencier produit stable de snapshot de dév.
 
-\section{Serveurs d'automatisation}
+\section{Serveurs d'automatisations}
 
 \subsection{Maven : déploiement et dépendances}
-Maven est un outil permettant d'automatiser la mise en place d'un projet en Java, en particulier cela gère les dépendances entre les librairies, d'où
-le souhait de l'utiliser. Cependant suite à des problèmes d'incompatibilité entre la version d'Android utilisée, nous avons du renoncé à l'utiliser.
-L'alternative utilisée est via Ant et l'APK de Google (Application Package File) permettant d'installer des logiciels sous Android,
-et les dépendances sont gérées manuellement, ceci ne pose pas de grands soucis car le nombre de dépendance est faible.
-L'automatisation concerne aussi les tests.
-%%Maven, pourquoi on voulait l'utiliser, pourquoi on ne l'a pas utilisé au final.
-%%Quelles sont les alternatives utilisées (donc, comment nous avons surmonté le risque posé par l'absence de Maven). Utilisation du générateur d'apk de 
-%google fourni de base dans ADT. Dépendances gérées à la main, pas grave car petit projet.
+Maven est un outil puissant permettant d'automatiser la mise en place d'un projet Java. Il gère la gestion des dépendances et des librairies utilisées. Cependant suite à des problèmes d'incompatibilité entre la version d'Android utilisée et le système de templates de Maven, nous avons dû renoncer à l'utiliser.
+L'alternative utilisée est l'outil Ant et le générateur d'APK de Google (Application Package File) permettant d'installer des logiciels sous Android. Les dépendances sont gérées manuellement, ce qui ne pose pas de problème quand le nombre de dépendances est faible.
 
 \subsection{Jenkins : tests et compilation}
-Jenkins est un outil permettant via un serveur de réaliser automatiquement des tests, ainsi à chaque commit Jenkins exécutent les tests et nous retourne
-un compte-rendu en cas d'erreur, ou si tous les tests ont réussi, mettre en place Jenkins a nécessité du temps pour prendre en main ce nouvel outil,
-toutefois cela restait en local, un serveur a été mis en place au CREMI,cependant il est configuré sur le serveur Savane donc il faudra utiliser svn.
-Un outil d'analyse de code serait un complément à l'outil Jenkins.
-
+Jenkins est un outil permettant via un serveur de réaliser automatiquement des tests. A chaque archivage du code, Jenkins peut exécuter les tests pour lesquels il est configuré et génère
+un compte-rendu ainsi que des journaux détaillés. La prise en main de Jenkins a nécessité du temps et son exécution
+se fait en local. Nous avons considéré et abandonné l'alternative proposée au CREMI, où le serveur est configuré pour fonctionner sur Savane, qui n'utilise pas git mais svn.
 
 \section{Analyse de code}
 
-Le projet est en Java, par conséquent le garbage collector gère la mémoire, toutefois étant donné que l'application doit 
-fonctionner sur une tablette, il est nécessaire d'éviter de surcharger la mémoire (ouvrir trop de fichiers en même temps, ...)
+Le projet est en Java, par conséquent le garbage collector gère la mémoire. Toutefois, étant donné que l'application doit 
+fonctionner sur une tablette, il est nécessaire d'éviter de surcharger cette mémoire (ouvrir trop de fichiers en même temps par exemple). Les outils d'analyse de code aident à éviter les mauvaises pratiques qui génèrent des fuites mémoire.
 \subsection{Sonar}
-Sonar outil puissant permettant une analyse poussée du code, (duplications de code, détection de bugs,...), cependant il est basé sur Maven par conséquent
-on ne peut l'utiliser. Ainsi nous nous sommes orienté vers un autre outil.
-%%Sonar, outil puissant avec frontend web pour la gestion qualité à l'aide de l'analyse du code. Basé sur Maven donc abandonné.
+Sonar permet une analyse poussée du code (duplications de code, détection de bogues, couverture par des tests etc.) mais il est basé sur Maven. Par conséquent nous ne pouvons pas l'utiliser. Ainsi nous nous sommes orientés vers un autre outil.
+
 \subsection{Lint}
-Lint permet la détection des erreurs de conception, (exemple: des namespaces dans un fichier xml non inutilisés), précise si des éléments sont
-dépréciés par rapport à l'API visé, le but étant d'améliorer la lisibilité, la sécurité, la performance ...
-%%Détecte certaines erreurs de conception et donne des conseils pour avoir un code de meilleur qualité. Outil Android. Correctness, Usability, security, 
-%%accessibility, performance (je cite la page google).
+Lint permet la détection de certaines erreurs de conception types et précise si des éléments sont
+obsolètes par rapport à l'API visé, le but étant d'améliorer la lisibilité, la sécurité, la performance du code...
 
 \section{Bibliothèques}
-Pour ce projet nous nous sommes intéressé à des librairies offrant un grand nombre de fonctionnalités que dont nous avons besoin,
-(parser d'image,d'informations, gestionnaire de fichiers, traitement d'image ...), ainsi deux libraires ont retenu notre attention.
+Pour ce projet nous nous sommes intéressé à des librairies offrant un grand nombre de fonctionnalités dont nous avions besoin : parser d'images et d'informations, gestionnaire de fichiers et traitement d'images. Deux libraires ont retenu notre attention.
 \begin{itemize}
-\item[\textbf{dcm4che:}]  est un projet open source en Java sur la médecine notamment la gestion des DICOM, cependant il utilise l'API Swing
-étant incompatible avec Android.
-\item[\textbf{pixelmed:}] projet oprn source offrant la gestion de DICOM et de traitement d'image, mais utilise l'API awt tout aussi incompatible sous 
+\item[\textbf{dcm4che:}]  est un projet open source en Java sur la médecine notamment la gestion des DICOM. Cependant il utilise le package Swing qui est incompatible avec Android.
+\item[\textbf{pixelmed:}] projet open source offrant la gestion de fichiers sous la norme DICOM et des fonctionnalités de traitement d'images. Il utilise le package awt qui n'est pas implémenté sous 
 Android.
 \end{itemize}
-%%dcm4che, pourquoi c'était bien, pourquoi c'est pas possible.
-%%pixelmed, pourquoi c'est génial, ce qu'on ne peut pas utiliser pour cause d'incompatibilité. Les conséquences sur le projet.
