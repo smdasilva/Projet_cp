@@ -1,21 +1,46 @@
 \chapter{Préparation / Mise en Œuvre} %Trouver un titre plus accrocheur, plus pertinant
-Le projet DIAMS a nécessité le déploiement et l'utilisation de nombreux outils et méthodes : aide à la gestion,
-tests, analyse de code, versionnage, communications et conventions. Certaines fonctionnalités de DIAMS sont basées sur des bibliothèques externes ou sur d'autres applications. Nous détaillons ici le déroulement de ce qui constitue l'étape préliminaire du projet.
+Le projet DIAMS a nécessité le déploiement et l'utilisation de nombreux outils et méthodes : aide à 
+la gestion,
+tests, analyse de code, gestionnaire de version, communications et conventions. Certaines 
+fonctionnalités de DIAMS sont basées sur des bibliothèques externes ou sur d'autres applications. 
+Nous détaillons ici le déroulement de ce qui constitue l'étape préliminaire du projet.
 
 \section{Suivi de projet}
-%Youkan, comment on le rempli ensembles, comment on valide avec le client, comment on vote les coûts.
-%Jazz d'IBM, comment on l'a vu mais pas utilisé car payant.
-%Listes de diffusion mail, convention [PCP] pour filtrer...
-%Réunions scrum, dire comme on en fait souvent pour faire le point. Comment on gère les risques (anticipation, priorité, contournement/solutions possibles). Comment on distribue les tâches, basé sur le volontariat.
-%Réunions client, comment on fait le pont avec lui, comment on l'implique dans le projet.
+L'organisation du projet se fait selon la méthode Scrum, ainsi nous utilisons l'outil
+Youkan, nous avons voulu utiliser l'outil Jazz d'IBM mais nous avons du renoncé car il était payant.
+Cet outil nous permet de nous organiser, en nous permettant de rédiger les User Stories,
+les différentes tâches. Chaque tâche est pondéré, le nombre de points par tâche est choisi
+par un vote, de plus Youkan est accessible par le client et ainsi il peut suivre l'avancement du
+projet. La répartition du travail est basé sur le volontariat, chaque semaine il y a entre 3 et quatre
+réunions afin de discuter de l'avancement (difficultés rencontrées, choix d'une API, framework,...),
+et une fois par semaine une réunion avec le client a lieu pour faire le point sur l'avancement du projet.\\
+Afin d'éviter tout litige d'incompatibilité entre les outils utilisé nous nous sommes mis d'accord
+sur l'environnement de travail, commun à tous.
+%%Youkan, comment on le rempli ensembles, comment on valide avec le client, comment on vote les coûts.
+%%Jazz d'IBM, comment on l'a vu mais pas utilisé car payant.
+
+%Listes de diffusion mail, convention [PCP] pour filtrer... faut vraiment mettre ça ?
+
+%%Réunions scrum, dire comme on en fait souvent pour faire le point. Comment on gère les risques (anticipation, priorité, contournement/solutions possibles). 
+%%Comment on distribue les tâches, basé sur le volontariat.
+%%Réunions client, comment on fait le point avec lui, comment on l'implique dans le projet.
 
 \section{Environnement de développement intégré}
-%Eclipse, ADT, SDK, DDMS (pour le debug)
-%Préciser qu'on utilise des OS différents. Donc justification d'Eclipse car c'est multiplateforme et que c'est pratique pour coder en android.
-%Préciser le SDK utilisé, car contraintes matérielles avec la tablette huawei.
-%Mentionner la rédaction et l'utilisation des conventions de codage.
+Le choix de l'IDE fut simple et rapide, en effet Eclipse est la référence pour le développement sous android, de plus il est multi-plateforme,
+en effet chaque membre n'utilise pas le même OS ce qui est d'autant plus pratique.
+Son plugin fournit tout le kit de développement, nous utilisons aussi le DDMS (Dalvik Debug Monitor Server) nous permettant de détecter et de résoudre
+des bugs. \\
+Une convention de codage a été mise en place pour assurer une plus grande cohérence entre les membres, cette convention est partie intégrante de la
+documentation développeur.
+Une tablette tactile nous a été prêté, cette tablette a la version d'android 2.1(API 7), n'étant pas la plus récente cela nous impose de nous adapter à
+cette version, par conséquent certains services ne sont pas accessibles.
+%le fichier de convention je le cite dans la biblio ?
+%%Eclipse, ADT, SDK, DDMS (pour le debug)
+%%Préciser qu'on utilise des OS différents. Donc justification d'Eclipse car c'est multiplateforme et que c'est pratique pour coder en android.
+%%Préciser le SDK utilisé, car contraintes matérielles avec la tablette huawei.
+%%Mentionner la rédaction et l'utilisation des conventions de codage.
 
-\section{Outils de versionnage}
+\section{Outils de version}
 %Git, GitHub. Justifier de son utilisation par le fait que c'est basé sur du "chacun a son répo.", plus robuste donc. Permet de réduire les risques --> (à mettre en gras souligné lol).
 %Smartgit, visuel, répos locaux/à distance, diff et log visuels.
 %Conventions push/pull. Genre le scrum master seul peut pusher sur la branche master. Tout le monde pull puis push. On fait des branches de tests/intégration pour différencier produit stable de snapshot de dév.
