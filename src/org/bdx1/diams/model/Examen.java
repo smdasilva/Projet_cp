@@ -13,7 +13,8 @@ public class Examen {
 
     private Map<String,String> patientInfos;
     private Map<String, String> studyInfos;
-    private List<File> sliceFiles = new LinkedList();
+    private List<File> sliceFiles = new LinkedList<File>();
+    private SliceCacher cache = new SliceCacher(5);
 
     public Examen(File studyFile) {
         InformationProvider infosProv = InformationProviderManager.getDicomProvider();
@@ -40,6 +41,6 @@ public class Examen {
     }
 
     public Slice getSlice(int i) {
-        return new Slice(sliceFiles.get(i));
+        return cache.getSlice(sliceFiles.get(i));
     }
 }
