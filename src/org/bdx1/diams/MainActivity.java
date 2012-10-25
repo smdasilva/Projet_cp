@@ -40,14 +40,10 @@ import java.util.Collections;
 import java.util.List;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +58,7 @@ import org.bdx1.diams.thread.DICOMImageCacher;
 import org.bdx1.diams.thread.ThreadState;
 import org.bdx1.dicom.data.DICOMMetaInformation;
 import org.bdx1.dicom.file.DICOMReader;
+import org.bdx1.diams.model.Examen;
 
 /**
  * File chooser.
