@@ -4,7 +4,7 @@ import com.pixelmed.dicom.AttributeTag;
 import com.pixelmed.dicom.TagFromName;
 
 enum DicomTags {
-    PatientName("Patient Name", TagFromName.PatientName),
+    PatientName("Patient Name",TagFromName.PatientName),
     PatientID("Patient ID", TagFromName.PatientID),
     PatientBirthDate("Patient birthday", TagFromName.PatientBirthDate),
     PatientAge("Patient age", TagFromName.PatientAge),
