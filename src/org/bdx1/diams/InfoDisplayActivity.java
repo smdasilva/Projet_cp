@@ -18,10 +18,11 @@ public class InfoDisplayActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_display);
-        File studyFile = new File(Environment.getExternalStorageDirectory().getPath()+"/dicomTest1.dcm");
-        exam = new Examen(studyFile);
+        DiamsApplication app = (DiamsApplication) getApplication();
+        exam = app.getCurrentExamen();
         InfosView view = (InfosView) findViewById(R.id.infos);
-        view.setExamen(exam);
+        if (exam != null)
+            view.setExamen(exam);
     }
 
     @Override
