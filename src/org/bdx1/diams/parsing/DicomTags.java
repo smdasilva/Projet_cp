@@ -3,6 +3,7 @@ package org.bdx1.diams.parsing;
 import com.pixelmed.dicom.AttributeTag;
 import com.pixelmed.dicom.TagFromName;
 
+
 enum DicomTags {
     PatientName("Patient Name",TagFromName.PatientName),
     PatientID("Patient ID", TagFromName.PatientID),
