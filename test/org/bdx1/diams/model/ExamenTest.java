@@ -22,9 +22,7 @@ public class ExamenTest {
     private static final File secondSliceFile = new File("test/resources/dicomTest2.dcm");
     
     private InformationProvider provider;
-    private Examen examen;
-    private SliceManager mockManager;
-    
+    private Examen examen;    
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -37,21 +35,7 @@ public class ExamenTest {
 
     @Before
     public void setUp() throws Exception {
-        mockManager = new SliceManager() {
-            List<Slice> slices = new ArrayList<Slice>();
-            public int numberOfSlices() {
-                return slices.size();
-            }
-            
-            public Slice getSlice(int i) {
-                return slices.get(i);
-            }
-            
-            public void addSlice(File source) {
-                slices.add(ModelFactory.makeSlice(source));
-            }
-        };
-        examen = new Examen(studyFile, mockManager);
+        examen = new Examen(studyFile, new ListSliceManager());
         provider = InformationProviderManager.getDicomProvider();
         provider.read(studyFile);
     }
