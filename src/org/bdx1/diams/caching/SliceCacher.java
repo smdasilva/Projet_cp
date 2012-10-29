@@ -3,8 +3,8 @@ package org.bdx1.diams.caching;
 import java.io.File;
 
 import org.bdx1.diams.model.BaseSlice;
+import org.bdx1.diams.model.ModelFactory;
 import org.bdx1.diams.model.Slice;
-
 
 import android.support.v4.util.LruCache;
 
@@ -17,32 +17,39 @@ class SliceCacher {
             chargeSlice(sourceFile);
         }
         
-        private void chargeSlice(File sourceFile) {
+        private synchronized void chargeSlice(final File sourceFile) {
             new Thread(new Runnable() {
                 
                 public void run() {
-                    cachedSlice = new BaseSlice(sourceFile);
+                    cachedSlice = ModelFactory.makeSlice(sourceFile);
                 }
             }).run();
         }
+        
+        public synchronized Slice getSlice() {
+            return cachedSlice;
+        }
     }
     
-    private LruCache<File, BaseSlice> internalCache;
+    private LruCache<File,CacheLine> internalCache;
     
     public SliceCacher(int maxSize) {
-        internalCache = new LruCache<File, BaseSlice>(maxSize) {
-            protected BaseSlice create(File key) {
-                return new BaseSlice(key);
-            }
-        };
+        internalCache = new LruCache<File, CacheLine>(maxSize);
     }
     
     public Slice getSlice(File sliceSource) {
-        return internalCache.get(sliceSource);
+        CacheLine found = internalCache.get(sliceSource);
+        if (found == null) {
+            found = new CacheLine(sliceSource);
+            internalCache.put(sliceSource, found);
+        }
+        return found.getSlice();
     }
     
     public void chargeInCache(File sliceSource) {
-        internalCache.get(sliceSource);
+        CacheLine found = internalCache.get(sliceSource);
+        if (found == null)
+            internalCache.put(sliceSource, new CacheLine(sliceSource));
     }
     
     public int maxSize() {
