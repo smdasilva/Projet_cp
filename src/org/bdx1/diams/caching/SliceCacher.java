@@ -2,8 +2,9 @@ package org.bdx1.diams.caching;
 
 import java.io.File;
 
+import org.bdx1.diams.Factory;
 import org.bdx1.diams.model.BaseSlice;
-import org.bdx1.diams.model.ModelFactory;
+import org.bdx1.diams.model.DefaultModelFactory;
 import org.bdx1.diams.model.Slice;
 
 import android.support.v4.util.LruCache;
@@ -21,7 +22,7 @@ class SliceCacher {
             new Thread(new Runnable() {
                 
                 public void run() {
-                    cachedSlice = ModelFactory.makeSlice(sourceFile);
+                    cachedSlice = Factory.MODEL_FACTORY.makeSlice(sourceFile);
                 }
             }).run();
         }
