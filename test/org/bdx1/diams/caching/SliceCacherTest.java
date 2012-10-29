@@ -1,10 +1,12 @@
-package org.bdx1.diams.model;
+package org.bdx1.diams.caching;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 
+import org.bdx1.diams.caching.SliceCacher;
+import org.bdx1.diams.model.Slice;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
