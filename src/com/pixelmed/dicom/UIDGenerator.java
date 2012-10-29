@@ -3,8 +3,8 @@
 package com.pixelmed.dicom;
 
 import java.util.StringTokenizer;
-import java.rmi.server.UID;
-import java.rmi.dgc.VMID;
+//import java.rmi.server.UID;
+//import java.rmi.dgc.VMID;
 
 import java.util.HashSet;		// for main() testing for uniqueness
 
@@ -48,8 +48,8 @@ public class UIDGenerator {
 		- 2			// . UIDGEN_XXX (would need to be three if > 9)
 		;			// no study#, series# or instance#
 	
-	private static VMID vmid = new VMID();									// virtual machine ID
-	private static long machineAddress =  vmid.isUnique() ? (((long)vmid.hashCode())&0x0ffffffffl) : new MACAddress().getMACAddress();
+	//private static VMID vmid = new VMID();									// virtual machine ID
+	private static long machineAddress =  0;//vmid.isUnique() ? (((long)vmid.hashCode())&0x0ffffffffl) : new MACAddress().getMACAddress();
 	//private static long machineAddress = new MACAddress().getMACAddress();
 
 	/**
@@ -74,7 +74,7 @@ public class UIDGenerator {
 	public void newStamp() {
 		long ourMachine = Math.abs(machineAddress);		// don't mess with the real machine address; need it unchanged for next time
 		
-		String string = new UID().toString();	// e.g. "19c082:fb77ce774a:-8000"
+		String string = "";//new UID().toString();	// e.g. "19c082:fb77ce774a:-8000"
 		StringTokenizer st = new StringTokenizer(string,":");
 		int  ourUnique = Math.abs(Integer.valueOf(st.nextToken(),16).intValue());
 		long   ourTime = Math.abs(   Long.valueOf(st.nextToken(),16).longValue());
