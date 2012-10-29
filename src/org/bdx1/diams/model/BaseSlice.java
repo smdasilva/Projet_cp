@@ -20,4 +20,14 @@ public class BaseSlice implements Slice {
     public Map<String, String> getInfos() {
         return Collections.unmodifiableMap(sliceInfos);
     }
+    
+    public boolean equals(Object other) {
+        if (other instanceof Slice)
+            return equals((Slice)other);
+        return false;
+    }
+    
+    public boolean equals(Slice other) {
+        return this.getInfos().equals(other.getInfos());
+    }
 }
