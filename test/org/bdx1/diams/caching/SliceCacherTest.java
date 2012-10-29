@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
+import org.bdx1.diams.Factory;
 import org.bdx1.diams.caching.SliceCacher;
 import org.bdx1.diams.model.Slice;
 import org.junit.After;
@@ -19,6 +20,7 @@ public class SliceCacherTest {
     private static final int cacheSize = 5;
     
     private SliceCacher cacher;
+    private Slice expected;
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -31,6 +33,7 @@ public class SliceCacherTest {
     @Before
     public void setUp() throws Exception {
         cacher = new SliceCacher(cacheSize);
+        expected = Factory.MODEL_FACTORY.makeSlice(dicom);
     }
 
     @After
@@ -41,6 +44,7 @@ public class SliceCacherTest {
     public void testGetSlice() {
         Slice result = cacher.getSlice(dicom);
         assertNotNull(result);
+        assertEquals(expected, result);
     }
 
     @Test
@@ -48,6 +52,7 @@ public class SliceCacherTest {
         cacher.chargeInCache(dicom);
         Slice result = cacher.getSlice(dicom);
         assertNotNull(result);
+        assertEquals(expected, result);
     }
 
     @Test
