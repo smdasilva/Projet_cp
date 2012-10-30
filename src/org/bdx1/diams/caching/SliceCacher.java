@@ -1,6 +1,7 @@
 package org.bdx1.diams.caching;
 
 import java.io.File;
+import java.util.concurrent.CountDownLatch;
 
 import org.bdx1.diams.Factory;
 import org.bdx1.diams.model.BaseSlice;
@@ -13,21 +14,29 @@ class SliceCacher {
 
     protected class CacheLine {
         private Slice cachedSlice;
+        private CountDownLatch lock;
         
-        CacheLine(File sourceFile) {
-            chargeSlice(sourceFile);
-        }
-        
-        private synchronized void chargeSlice(final File sourceFile) {
+        CacheLine(final File sourceFile) {
+            lock = new CountDownLatch(1);
             new Thread(new Runnable() {
                 
                 public void run() {
-                    cachedSlice = Factory.MODEL_FACTORY.makeSlice(sourceFile);
+                    chargeSlice(sourceFile);                    
                 }
             }).run();
         }
         
-        public synchronized Slice getSlice() {
+        private void chargeSlice(final File sourceFile) {
+            cachedSlice = Factory.MODEL_FACTORY.makeSlice(sourceFile);
+            lock.countDown();
+        }
+        
+        public Slice getSlice() {
+            try {
+                lock.await();
+            } catch (InterruptedException e) {
+                return null;
+            }
             return cachedSlice;
         }
     }
