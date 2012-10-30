@@ -289,12 +289,237 @@ public class Mi3DBinaryParser implements Parser {
 }
         
         
-    }
 
     @Override
-    public boolean saveFile(String filename, Examen exam, List<Boolean> options) {
-	// TODO Auto-generated method stub
-	return false;
-    }
+    public boolean saveFile(String filename, Examen exam, List<boolean> options) {
 
-}
+    	DataOutputStream lecteur;
+        
+        lecteur=
+          new DataOutputStream(new BufferedOutputStream
+    			  (new FileOutputStream(filename)));  
+    	
+    	
+              boolean boolVal;
+              int intVal, intVal2;
+              float floatVal;
+              char charPtrVal;
+              float floatPtrVal;
+
+
+              //-------------------------------
+              // ENTETE
+              //-------------------------------
+
+              boolVal = options.get(0);
+              lecteur.writeBoolean(boolVal);
+              boolVal = options.get(1);
+              imageWriter.writeBoolean(boolVal);
+              boolVal = options.get(2);
+              imageWriter.writeBoolean(boolVal);
+
+              intVal = examen.getWidth();
+              imageWriter.writeInt(intVal);
+              intVal = examen.getHeight();
+              imageWriter.writeInt(intVal);
+              intVal = examen.getSize();
+              imageWriter.writeInt(intVal);
+
+              imageWriter.writeBoolean(floatVal);
+              floatVal = examen.getResolutionX();
+              imageWriter.writeFloat(floatVal);
+              floatVal = examen.getResolutionY();
+              imageWriter.writeFloat(floatVal);
+              floatVal = examen.getResolutionZ();
+
+
+              imageWriter.writeFloat(floatVal);
+              floatVal = examen.getSlope();
+              imageWriter.writeInt(floatVal);
+              floatVal = examen.getIntercept();
+              imageWriter.writeInt(floatVal);
+              floatVal = examen.getWindowingMin();
+              imageWriter.writeInt(floatVal);
+              floatVal = examen.getWindowingMax();
+
+
+              //-------------------------------
+              // VOLUME
+              //-------------------------------
+
+              if (options.get(0))
+              {
+
+                  Mask mask = examen.getMasqueRef();
+                  charPtrVal = mask.getSrcRef();
+                  int size = examen.getWidth()
+                             * examen.getHeight() * examen.getDepth();
+
+                  imageWriter.writeInt(charPtrVal);
+              }
+
+              //-------------------------------
+              // SKELETON
+              //-------------------------------
+
+              if (options.get(1))
+              {
+                  Skeleton skeleton = examen.getSkeleton();
+
+                  // Nodes
+                  intVal = skeleton.getNodesSize();
+                  imageWriter.writeInt(intVal);
+                  for (int i=0 ; i < intVal ; i++)
+                  {
+                      Node node = skeleton.getNode(i);
+
+                      imageWriter.writeFloat(node.x);
+                      imageWriter.writeFloat(node.y);
+                      imageWriter.writeFloat(node.z);
+                      imageWriter.writeBoolean(node.flagview);
+                      imageWriter.writeInt(node.parent);
+
+                      intVal2 = node.childrens.size();
+                      imageWriter.writeInt(intVal2);
+                      for (int j=0 ; j < node.childrens.size() ; j++)
+                      {
+                          intVal2 = node.childrens.get(j);
+                          imageWriter.writeInt(intVal2);
+                      }
+                  }
+
+                  // Branches
+                  intVal = skeleton.getBranchesSize();
+                  imageWriter.writeInt(intVal);
+                  for (int i=0 ; i < intVal ; i++)
+                  {
+                      Branch branch = skeleton.getBranch(i);
+
+                      imageWriter.writeBoolean(branch.flagView);
+                      imageWriter.writeInt(branch.parent);
+                      imageWriter.writeInt(branch.generation);
+                      imageWriter.writeFloat(branch.length);
+                      imageWriter.writeDouble(branch.angle.rho);
+                      imageWriter.writeDouble(branch.angle.theta);
+
+                      intVal2 = (int)branch.name.size()+1;
+                      imageWriter.writeInt(intVal2);
+                      imageWriter.writeChar(branch.name.c_str());
+
+                      intVal2 = branch.childrens.size();
+                      imageWriter.writeInt(intVal2);
+                      for (int j=0 ; j < branch.childrens.size() ; j++)
+                      {
+                          intVal2 = branch.childrens.get(j);
+                          imageWriter.write(intVal2);
+                      }
+
+                      intVal2 = branch.nodes.size();
+                      imageWriter.writeInt(intVal2);
+                      for (int j=0 ; j < branch.nodes.size() ; j++)
+                      {
+                          intVal2 = branch.nodes.get(j);
+                          imageWriter.writeInt(intVal2);
+                      }
+                  }
+
+                  // SKELETON SLICES
+
+                  if (options.get(2))
+                  {
+                      for (int i=0 ; i < skeleton.getBranchesSize() ; i++)
+                      {
+                          Branch branch = skeleton.getBranch(i);
+
+                          // Slices coord
+                          intVal = branch.slices.size();
+                          imageWriter.writeInt(intVal);
+                          for (int j=0 ; j < intVal ; j++)
+                          {
+                              SkeletonSlice skelSlice = branch.slices.get(j);
+
+                              // Test : ajout de la résolution de l'image ancien / nouveau format bmi3d
+                              intVal2 = -1;
+                              imageWriter.writeInt(intVal2);
+                              imageWriter.writeFloat(skelSlice.resolution.x);
+                              imageWriter.writeFloat(skelSlice.resolution.y);
+
+                              ImageData<Point3D_t<int> > coord = skelSlice.coord;
+                              intVal2 = coord.getWidth();
+                              imageWriter.writeInt(intVal2);
+                              intVal2 = coord.getHeight();
+                              imageWriter.writeInt(intVal2);
+
+                              for (int k=0 ; k < coord.getWidth() * coord.getHeight() ; k++)
+                              {
+                                  Point3D_t<int> p = coord.getData(k);
+                                  imageWriter.writeInt(p.x);
+                                  imageWriter.writeInt(p.y);
+                                  imageWriter.writeInt(p.z);
+                              }
+                          }
+
+                          // Slices image
+                          intVal = branch.slices.size();
+                          imageWriter.writeInt(intVal);
+                          for (int j=0 ; j < intVal ; j++)
+                          {
+                              Image image = branch.slices.get(j).image;
+
+                              // Test : ajout de la résolution de l'image ancien / nouveau format bmi3d
+                              intVal2 = -1;
+                              imageWriter.writeInt(intVal2);
+                              intVal2 = image.getSlope();
+                              imageWriter.writeInt(intVal2);
+                              intVal2 = image.getIntercept();
+                              imageWriter.writeInt(intVal2);
+
+                              intVal2 = image.getWidth();
+                              imageWriter.writeInt(intVal2);
+                              intVal2 = image.getHeight();
+                              imageWriter.writeInt(intVal2);
+
+                              int size = image.getWidth() * image.getHeight();
+
+                              // image
+                              floatPtrVal = image.getSrc();
+                              imageWriter.writeFloat(floatPtrVal); //sizeof(float) * size
+
+                              // mask
+                              charPtrVal = image.getMask().getSrc();
+                              imageWriter.writeChar(charPtrVal); //sizeof(char) * size
+                          }
+                      }
+                  }
+
+              }
+
+              //-------------------------------
+              // DATA
+              //-------------------------------
+
+              Mask data = examen.getDataRef();
+              floatPtrVal = data.getSrcRef();
+              int size = examen.getWidth()
+                         * examen.getHeight() * examen.getDepth();
+
+              imageWriter.writeChar(charPtrVal); // sizeof(char) *size
+
+              //-------------------------------
+              //MAX
+              //-------------------------------
+              int sizetab=examen.getDepth();
+              imageWriter.writeFloat(examen.getTabMax()); // sizeof(float) *size
+
+              //-------------------------------
+              //Informations examens et pour la liste d'image //A FAIRE
+              //-------------------------------
+
+              imageWriter.close();
+
+              return true;
+
+      }
+    	
+
+
