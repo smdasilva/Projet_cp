@@ -293,7 +293,7 @@ public class Mi3DBinaryParser implements Parser {
     @Override
     public boolean saveFile(String filename, Examen exam, List<boolean> options) {
 
-    	DataOutputStream lecteur;
+    	DataOutputStream imageWriter;
         
         lecteur=
           new DataOutputStream(new BufferedOutputStream
@@ -312,7 +312,7 @@ public class Mi3DBinaryParser implements Parser {
               //-------------------------------
 
               boolVal = options.get(0);
-              lecteur.writeBoolean(boolVal);
+              imageWriter.writeBoolean(boolVal);
               boolVal = options.get(1);
               imageWriter.writeBoolean(boolVal);
               boolVal = options.get(2);
