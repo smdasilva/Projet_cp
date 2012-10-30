@@ -411,7 +411,7 @@ public class Mi3DBinaryParser implements Parser {
                       for (int j=0 ; j < branch.childrens.size() ; j++)
                       {
                           intVal2 = branch.childrens.get(j);
-                          imageWriter.write(intVal2);
+                          imageWriter.writeInt(intVal2); //intVal2, sizeof(int)
                       }
 
                       intVal2 = branch.nodes.size();
