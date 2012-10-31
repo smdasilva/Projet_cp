@@ -7,6 +7,10 @@ import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.ModelFactory;
 import org.bdx1.diams.model.Slice;
 
+/**
+ * This class creates instances of model classes
+ * and allows them to use caching functionalities.
+ */
 public class CachingModelFactory implements ModelFactory {
 
     private ModelFactory factory = new DefaultModelFactory();
