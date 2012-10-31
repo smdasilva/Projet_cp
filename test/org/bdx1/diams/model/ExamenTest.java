@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.bdx1.diams.parsing.InformationProvider;
@@ -20,7 +22,7 @@ public class ExamenTest {
     private static final File secondSliceFile = new File("test/resources/dicomTest2.dcm");
     
     private InformationProvider provider;
-    private Examen examen;
+    private Examen examen;    
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -33,7 +35,7 @@ public class ExamenTest {
 
     @Before
     public void setUp() throws Exception {
-        examen = new Examen(studyFile);
+        examen = new Examen(studyFile, new ListSliceManager());
         provider = InformationProviderManager.getDicomProvider();
         provider.read(studyFile);
     }

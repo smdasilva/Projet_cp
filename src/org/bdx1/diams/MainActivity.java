@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         File dicomFile = new File(
                 Environment.getExternalStorageDirectory()+"/dicomTest1.dcm");
-        Examen exam = new Examen(dicomFile);
+        Examen exam = Factory.MODEL_FACTORY.makeExamen(dicomFile);
         DiamsApplication app = (DiamsApplication) getApplication();
         app.setCurrentExamen(exam);
         Intent intent = new Intent(getApplicationContext(), InfoDisplayActivity.class);

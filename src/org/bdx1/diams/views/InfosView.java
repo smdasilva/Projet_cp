@@ -27,6 +27,7 @@ public class InfosView extends TextView {
         builder.append("Patient infos :\n");
         Map<String, String> patientInfos = this.examen.getPatientInfos();
         for (String key : patientInfos.keySet()) {
+            builder.append('\t');
             builder.append(key);
             builder.append(" : ");
             builder.append(patientInfos.get(key));
@@ -35,6 +36,7 @@ public class InfosView extends TextView {
         builder.append("\nStudy infos :\n");
         Map<String, String> studyInfos = this.examen.getStudyInfos();
         for (String key : studyInfos.keySet()) {
+            builder.append('\t');
             builder.append(key);
             builder.append(" : ");
             builder.append(studyInfos.get(key));
