@@ -35,7 +35,7 @@ public class SliceTest {
 
     @Test
     public void testGetInfos() {
-        Slice s = new Slice(dicom);
+        Slice s = new BaseSlice(dicom);
         InformationProvider prov = InformationProviderManager.getDicomProvider();
         prov.read(dicom);
         Map<String, String> expectedInfos = prov.getSliceInfos();
