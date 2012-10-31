@@ -7,6 +7,10 @@ import java.util.Map;
 import org.bdx1.diams.parsing.InformationProvider;
 import org.bdx1.diams.parsing.InformationProviderManager;
 
+/**
+ * Default implementation for the Slice interface.
+ * Implements equals for comparisons.
+ */
 public class BaseSlice implements Slice {
 
     private Map<String, String> sliceInfos;
