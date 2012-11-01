@@ -34,10 +34,11 @@
 package org.bdx1.diams;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Activity;
@@ -62,6 +63,8 @@ import org.bdx1.commons.ExternalStorage;
 import org.bdx1.dicom.data.DICOMMetaInformation;
 import org.bdx1.dicom.file.DICOMReader;
 import org.bdx1.diams.model.Examen;
+import org.bdx1.diams.parsing.InformationProvider;
+import org.bdx1.diams.parsing.InformationProviderManager;
 
 /**
  * File chooser.
@@ -273,7 +276,6 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		// TODO : cancelable dialog ?
 		switch (id) {
 		default:
 			return null;
@@ -367,8 +369,10 @@ public class MainActivity extends ListActivity {
 			// If it is a directory
 			if (child.isDirectory()) {
 				String directoryName = child.getName();
-				if (directoryName.charAt(0) != '.')
-					directoryList.add("/" + child.getName());			
+				if (directoryName.charAt(0) != '.') {
+					//TODO: add support for DICOMDIR corresponding to 1 exam of a given patient
+					directoryList.add("/" + child.getName());
+				}
 			} else { // If it is a file.
 				String[] fileName = child.getName().split("\\.");
 
@@ -376,13 +380,15 @@ public class MainActivity extends ListActivity {
 					if (fileName.length > 1) {
 						// DICOM files which have no extension or a 'dcm' extension
 						if (fileName[fileName.length - 1]
-								.equalsIgnoreCase("dcm")) {
+								.equalsIgnoreCase("dcm") && isValidDicomFile(child)) {
+							InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
+							dicomProv.read(child);
+							Map<String, String> patientInfos = dicomProv.getPatientInfos();
+							fileList.add(patientInfos.get("Patient Name") + " "
+									+ patientInfos.get("Patient age") + " "
+									+ patientInfos.get("Patient sex"));
 							fileList.add(child.getName());
-							// Else if it is a LISA image, counts the cached
-							// images.
 						} 
-					} else {
-						fileList.add(child.getName());
 					}
 				}
 			}
@@ -406,6 +412,42 @@ public class MainActivity extends ListActivity {
 		mAdapter = new ArrayAdapter<String>(this, R.layout.file_chooser_item,
 				R.id.fileName, fileList);
 		setListAdapter(mAdapter);
+	}
+
+	/**
+	 * Determines if a file is a valid Dicom file. Used to fill the files list correctly.
+	 */
+	private boolean isValidDicomFile(File child) {
+		try {
+			// Create a DICOMReader to parse meta informations
+			DICOMReader dicomReader = new DICOMReader(child);
+			dicomReader.parseMetaInformation();
+			dicomReader.close();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Determines if a directory is a valid Dicom dir. Use it to fill the dir list correctly.
+	 */
+	private boolean isValidDicomDir(File dir) {
+		for (File child : dir.listFiles()) {
+			try {
+				// Ignores sub-directories
+				if (!child.isDirectory()) {
+					// Create a DICOMReader to parse meta informations
+					DICOMReader dicomReader = new DICOMReader(child);
+					dicomReader.parseMetaInformation();
+					dicomReader.close();
+				}
+			} catch (Exception ex) {
+				return false;
+			}
+		}
+		//TODO: take into account the case when a dir only contains sub-dirs and no files.
+		return true;
 	}
 
 	/**
