@@ -59,8 +59,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.bdx1.commons.ExternalStorage;
-import org.bdx1.diams.thread.DICOMImageCacher;
-import org.bdx1.diams.thread.ThreadState;
 import org.bdx1.dicom.data.DICOMMetaInformation;
 import org.bdx1.dicom.file.DICOMReader;
 import org.bdx1.diams.model.Examen;
@@ -84,19 +82,9 @@ public class MainActivity extends ListActivity {
 	private static final String TOP_DIR_ID = "top_directory";
 
 	/**
-	 * Menu id for DICOM images caching.
-	 */
-	private static final short MENU_CACHE_IMAGE = 0;
-
-	/**
 	 * Menu for the displaying of the about dialog.
 	 */
 	private static final short MENU_ABOUT = 1;
-
-	/**
-	 * Define the progress dialog id for the caching of DICOM image.
-	 */
-	private static final short PROGRESS_DIALOG_CACHE = 1;
 
 	// ---------------------------------------------------------------
 	// - VARIABLES
@@ -118,19 +106,9 @@ public class MainActivity extends ListActivity {
 	private int mTotal = 0;
 
 	/**
-	 * TextView to display the cached files count.
-	 */
-	private TextView mCachedFileTextView;
-
-	/**
 	 * File chooser main layout.
 	 */
 	private LinearLayout mMainLayout;
-
-	/**
-	 * Progress dialog for file caching.
-	 */
-	private ProgressDialog cachingDialog;
 
 	// ---------------------------------------------------------------
 	// # <override> FUNCTIONS
@@ -150,35 +128,6 @@ public class MainActivity extends ListActivity {
 
 		// Defines the main layout
 		mMainLayout = (LinearLayout) findViewById(R.id.file_chooser_mainLayout);
-
-		// Defines the cached files TextView (even if it is not
-		// shown) and defines the onClick listener
-		mCachedFileTextView = new TextView(this);
-		mCachedFileTextView.setPadding(10, 20, 10, 20);
-		mCachedFileTextView.setBackgroundColor(0xffffffff);
-		mCachedFileTextView.setTextColor(0xff000000);
-		mCachedFileTextView.setTextSize(14.0f);
-		mCachedFileTextView.setClickable(true);
-		mCachedFileTextView.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						MainActivity.this);
-				builder.setMessage("Do you want to delete the cached files ?")
-						.setTitle("Cached files")
-						.setCancelable(true)
-						.setPositiveButton("Cancel", null)
-						.setNegativeButton("Delete",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										MainActivity.this.deleteCachedFile();
-									}
-								});
-				AlertDialog alertDialog = builder.create();
-				alertDialog.show();
-			}
-		});
 
 		// Checks if the external storage is available
 		if (ExternalStorage.checkAvailable()) {
@@ -326,14 +275,6 @@ public class MainActivity extends ListActivity {
 	protected Dialog onCreateDialog(int id) {
 		// TODO : cancelable dialog ?
 		switch (id) {
-		// Create image cache dialog
-		case PROGRESS_DIALOG_CACHE:
-			cachingDialog = new ProgressDialog(this);
-			cachingDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			cachingDialog.setMessage("Caching image...");
-			cachingDialog.setCancelable(false);
-			return cachingDialog;
-
 		default:
 			return null;
 		}
@@ -372,7 +313,7 @@ public class MainActivity extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(0, MENU_CACHE_IMAGE, 0, "Cache every images");
+		//menu.add(0, MENU_CACHE_IMAGE, 0, "Cache every images");
 		menu.add(0, MENU_ABOUT, 1, "About");
 
 		return true;
@@ -387,9 +328,6 @@ public class MainActivity extends ListActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
 		switch (item.getItemId()) {
-		case MENU_CACHE_IMAGE:
-			cacheImages();
-			return true;
 
 		case MENU_ABOUT:/*
 						 * Dialog dialog = new Dialog(this);
@@ -417,13 +355,6 @@ public class MainActivity extends ListActivity {
 		if (!ExternalStorage.checkAvailable())
 			return;
 
-		// Remove the cached file text view from the layout
-		if (mMainLayout.indexOfChild(mCachedFileTextView) != -1)
-			mMainLayout.removeView(mCachedFileTextView);
-
-		// Cached files counter
-		int cachedImageCount = 0;
-
 		// Gets the children directories and the files of the top directory
 		File[] childrenFiles = mTopDirectory.listFiles();
 
@@ -449,9 +380,7 @@ public class MainActivity extends ListActivity {
 							fileList.add(child.getName());
 							// Else if it is a LISA image, counts the cached
 							// images.
-						} else if (fileName[fileName.length - 1].equals("lisa")) {
-							cachedImageCount++;
-						}
+						} 
 					} else {
 						fileList.add(child.getName());
 					}
@@ -474,152 +403,9 @@ public class MainActivity extends ListActivity {
 			fileList.add(0, "..");
 		}
 
-		// If there is cached files, displays it
-		if (cachedImageCount > 0) {
-			mCachedFileTextView.setText("Cached files: " + cachedImageCount);
-			mMainLayout.addView(mCachedFileTextView, 0);
-		}
-
 		mAdapter = new ArrayAdapter<String>(this, R.layout.file_chooser_item,
 				R.id.fileName, fileList);
 		setListAdapter(mAdapter);
-	}
-
-	/**
-	 * Delete cached files present in the mTopDirectory.
-	 */
-	private void deleteCachedFile() {
-
-		if (!ExternalStorage.checkWritable()) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(
-					"Cannot delete cached files because "
-							+ "the external storage is not writable.")
-					.setTitle("[ERROR] Delete cached files.")
-					.setCancelable(false).setPositiveButton("Close", null);
-
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
-
-			return;
-		}
-
-		// Get the children directories and the files of the top directory
-		File[] childrenFiles = mTopDirectory.listFiles();
-
-		// Loop on the file of the directory
-		for (File child : childrenFiles) {
-			// If it is not a directory or a hidden file
-			if (!child.isDirectory() && child.getName().charAt(0) != '.') {
-				// Checks that the extension is "lisa"
-				String[] fileName = child.getName().split("\\.");
-				// If it is the case, there is a dot in the file name
-				if (fileName.length > 1) {
-					if (fileName[fileName.length - 1].equals("lisa")) {
-						child.delete();
-					}
-				}
-			}
-		}
-		// Updates the view
-		fill();
-	}
-
-	/**
-	 * Cache of the images in the files array
-	 */
-	private void cacheImages() {
-
-		try {
-			// The handler is inside the function because
-			// normally this function is called once.
-			final Handler cacheHandler = new Handler() {
-				public void handleMessage(Message message) {
-
-					switch (message.what) {
-
-						case ThreadState.STARTED:
-							cachingDialog.setMax(message.arg1);
-							break;
-	
-						case ThreadState.PROGRESSION_UPDATE:
-							cachingDialog.setProgress(message.arg1);
-							break;
-	
-						case ThreadState.FINISHED:
-							try {	
-								dismissDialog(PROGRESS_DIALOG_CACHE);	
-							} catch (IllegalArgumentException ex) {
-								// Do nothing
-							}
-							fill();
-							break;
-	
-						case ThreadState.CATCHABLE_ERROR_OCCURRED:
-							cachingDialog.setProgress(message.arg1);
-							Toast.makeText(
-									MainActivity.this,
-									"[Error]: file (" + (String) message.obj
-											+ ") cannot be cached.",
-									Toast.LENGTH_SHORT).show();
-							break;
-	
-						case ThreadState.UNCATCHABLE_ERROR_OCCURRED:
-							try {	
-								dismissDialog(PROGRESS_DIALOG_CACHE);	
-							} catch (IllegalArgumentException ex) {
-								// Do nothing
-							}
-							AlertDialog.Builder builder = new AlertDialog.Builder(
-									MainActivity.this);
-							builder.setMessage(
-									"Unknown error: An unknown error occurred during"
-											+ " the images caching process.")
-									.setTitle("[ERROR] Caching file")
-									.setCancelable(false)
-									.setPositiveButton("Close", null);
-							AlertDialog alertDialog = builder.create();
-							alertDialog.show();
-							break;
-	
-						case ThreadState.OUT_OF_MEMORY:
-							try {	
-								dismissDialog(PROGRESS_DIALOG_CACHE);	
-							} catch (IllegalArgumentException ex) {
-								// Do nothing
-							}
-							builder = new AlertDialog.Builder(MainActivity.this);
-							builder.setMessage(
-									"OutOfMemoryError: During the caching process,"
-											+ " an out of memory error occurred.\n\n"
-											+ "Your file(s) is (are) too large for your system. You can"
-											+ " try again in the file chooser. If the error occures again,"
-											+ " then the image(s) cannot be displayed on your device.\n"
-											+ "Try to use a desktop file viewer software")
-									.setTitle("[ERROR] Caching file")
-									.setCancelable(false)
-									.setPositiveButton("Close", null);
-							alertDialog = builder.create();
-							alertDialog.show();
-							break;
-					};
-				}
-			};
-
-			// Shows the progress dialog for caching images
-			showDialog(PROGRESS_DIALOG_CACHE);
-
-			// Starts the caching org.bdx1.diams.thread
-			DICOMImageCacher dicomImageCacher = new DICOMImageCacher(
-					cacheHandler, mTopDirectory);
-			dicomImageCacher.start();
-		} catch (FileNotFoundException e) {
-			Toast.makeText(
-					MainActivity.this,
-					"[Error]: a file may have been suppressed during the caching process." +
-					"Please try again later",
-					Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	/**
