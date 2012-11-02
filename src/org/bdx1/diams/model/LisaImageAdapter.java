@@ -18,4 +18,8 @@ public class LisaImageAdapter implements Image {
         return lisaImage.getWidth();
     }
 
+    public int[] getData() {
+        return lisaImage.getData();
+    }
+
 }

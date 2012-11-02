@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         Examen exam = Factory.MODEL_FACTORY.makeExamen(dicomFile);
         DiamsApplication app = (DiamsApplication) getApplication();
         app.setCurrentExamen(exam);
-        Intent intent = new Intent(getApplicationContext(), InfoDisplayActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
         startActivity(intent);
     }
 

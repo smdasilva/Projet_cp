@@ -14,5 +14,11 @@ public interface Slice {
      * @return A Map containing all slice informations.
      */
     public Map<String, String> getInfos();
+    
+    /**
+     * 
+     * @return The image of this Slice
+     */
+    public Image getImage();
 
 }
