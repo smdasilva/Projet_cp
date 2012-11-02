@@ -31,7 +31,7 @@ public class CachingSliceManager implements SliceManager {
     }
 
     public Slice getSlice(int i) {
-        for (int n=0 ; n<=CACHE_REACH ; n++) {
+        for (int n=1 ; n<=CACHE_REACH ; n++) {
             if (i+n < files.size())
                 cache.chargeInCache(files.get(i+n));
             if (i-n >= 0)
