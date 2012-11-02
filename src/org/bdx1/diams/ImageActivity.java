@@ -4,8 +4,10 @@ import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.views.DiamsImageView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 public class ImageActivity extends Activity {
 
@@ -22,5 +24,10 @@ public class ImageActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_image, menu);
         return true;
+    }
+    
+    public void showInfos(View v) {
+        Intent intent = new Intent(getApplicationContext(), InfoDisplayActivity.class);
+        startActivity(intent);
     }
 }

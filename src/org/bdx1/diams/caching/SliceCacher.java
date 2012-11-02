@@ -35,7 +35,7 @@ class SliceCacher {
                 public void run() {
                     chargeSlice(sourceFile);                    
                 }
-            }).run();
+            }).start();
         }
         
         private void chargeSlice(final File sourceFile) {
