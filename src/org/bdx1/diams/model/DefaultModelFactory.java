@@ -1,13 +1,9 @@
 package org.bdx1.diams.model;
 
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import org.bdx1.dicom.DICOMException;
-import org.bdx1.dicom.data.DICOMImage;
-import org.bdx1.dicom.file.DICOMImageReader;
+import org.bdx1.diams.parsing.ImageProvider;
+import org.bdx1.diams.parsing.ImageProviderManager;
 
 /**
  * Default implementation for ModelFactory.
@@ -24,22 +20,9 @@ public class DefaultModelFactory implements ModelFactory {
     }
 
     public static Image makeImage(File dicom) {
-        DICOMImageReader reader;
-        try {
-            reader = new DICOMImageReader(dicom);
-        } catch (FileNotFoundException e) {
+        ImageProvider prov = ImageProviderManager.getDicomProvider();
+        if (!prov.read(dicom))
             return null;
-        }
-        DICOMImage img;
-        try {
-            img = reader.parse();
-        } catch (EOFException e) {
-            return null;
-        } catch (IOException e) {
-            return null;
-        } catch (DICOMException e) {
-            return null;
-        }
-        return new LisaImageAdapter(img.getImage());
+        return prov.getImage();
     }
 }
