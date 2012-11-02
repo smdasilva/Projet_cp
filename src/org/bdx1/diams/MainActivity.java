@@ -371,6 +371,10 @@ public class MainActivity extends ListActivity {
 				String directoryName = child.getName();
 				if (directoryName.charAt(0) != '.') {
 					//TODO: add support for DICOMDIR corresponding to 1 exam of a given patient
+					if(containsValidDicomFiles(child)) {
+						//Change the name of the dir to reflect patient informations.
+						//A click on the dir should directly open the corresponding exam.
+					}
 					directoryList.add("/" + child.getName());
 				}
 			} else { // If it is a file.
@@ -415,6 +419,28 @@ public class MainActivity extends ListActivity {
 	}
 
 	/**
+	 * Determines if a directory is a valid Dicom directory. Use it to fill the list correctly
+	 */
+	private boolean containsValidDicomFiles(File dir) {
+		return (containsDicomFiles(dir) && isValidDicomDir(dir));
+	}
+
+	/**
+	 * Determines if a directory contains at least one Dicom file.
+	 */
+	private boolean containsDicomFiles(File dir) {
+		for (File child : dir.listFiles()) {
+			if (!child.isDirectory()) {
+				String[] fileName = child.getName().split("\\.");
+				if (fileName[fileName.length - 1].equalsIgnoreCase("dcm")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Determines if a file is a valid Dicom file. Used to fill the files list correctly.
 	 */
 	private boolean isValidDicomFile(File child) {
@@ -430,7 +456,7 @@ public class MainActivity extends ListActivity {
 	}
 	
 	/**
-	 * Determines if a directory is a valid Dicom dir. Use it to fill the dir list correctly.
+	 * Determines if a directory contains valid Dicom files.
 	 */
 	private boolean isValidDicomDir(File dir) {
 		for (File child : dir.listFiles()) {
