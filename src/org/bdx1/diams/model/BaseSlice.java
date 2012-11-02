@@ -14,11 +14,13 @@ import org.bdx1.diams.parsing.InformationProviderManager;
 public class BaseSlice implements Slice {
 
     private Map<String, String> sliceInfos;
+    private Image img;
     
     BaseSlice(File sourceFile) {
         InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
         dicomProv.read(sourceFile);
         sliceInfos = dicomProv.getSliceInfos();
+        img = DefaultModelFactory.makeImage(sourceFile);
     }
     
     public Map<String, String> getInfos() {
@@ -33,5 +35,9 @@ public class BaseSlice implements Slice {
     
     public boolean equals(Slice other) {
         return this.getInfos().equals(other.getInfos());
+    }
+
+    public Image getImage() {
+        return img;
     }
 }
