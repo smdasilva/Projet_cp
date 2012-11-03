@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="View Infos" 
+        android:text="@string/view_infos" 
         android:onClick="showInfos"/>
 
 </RelativeLayout>
