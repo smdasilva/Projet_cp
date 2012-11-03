@@ -34,8 +34,6 @@
 package org.bdx1.diams;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -94,19 +92,14 @@ public class MainActivity extends ListActivity {
 	// ---------------------------------------------------------------
 
 	/**
-	 * Current directory.
+	 * File handler.
 	 */
-	private File mTopDirectory;
+	private FileHandler fileHandler;
 
 	/**
 	 * Array adapter to display the directory and the files.
 	 */
 	ArrayAdapter<String> mAdapter;
-
-	/**
-	 * DICOM file in mTopDirectory count.
-	 */
-	private int mTotal = 0;
 
 	/**
 	 * File chooser main layout.
@@ -139,12 +132,12 @@ public class MainActivity extends ListActivity {
 			if (savedInstanceState != null) {
 				String topDirectoryString = savedInstanceState
 						.getString(TOP_DIR_ID);
-				mTopDirectory = (topDirectoryString == null) ? Environment
-						.getExternalStorageDirectory() : new File(
-						savedInstanceState.getString("top_directory"));
+				fileHandler = ((topDirectoryString == null) ? new DicomDirFileHandler(Environment
+						.getExternalStorageDirectory()) : new DicomDirFileHandler(new File(
+						savedInstanceState.getString("top_directory"))));
 			} else {
-				// Set the top directory
-				mTopDirectory = Environment.getExternalStorageDirectory();
+				// Set the file handler
+				fileHandler = new DicomDirFileHandler(Environment.getExternalStorageDirectory());
 				// Displays the disclaimer
 				displayDisclaimer();
 			}
@@ -199,18 +192,20 @@ public class MainActivity extends ListActivity {
 
 		// If it is a directory, displays its content
 		if (itemName.charAt(0) == '/') {
-			mTopDirectory = new File(mTopDirectory.getPath() + itemName);
+			String clickedPath = fileHandler.getmTopDirectory().getPath() + itemName;
+			fileHandler.setmTopDirectory(new File(clickedPath));
 			fill();
 			// If itemNam = ".." go to parent directory
 		} else if (itemName.equals("..")) {
-			mTopDirectory = mTopDirectory.getParentFile();
+			File parentFile = fileHandler.getmTopDirectory().getParentFile();
+			fileHandler.setmTopDirectory(parentFile);
 			fill();
 			// If it is a file.
 		} else {
 			try {
 				// Create a DICOMReader to parse meta informations
-				DICOMReader dicomReader = new DICOMReader(
-						mTopDirectory.getPath() + "/" + itemName);
+				String filePath = fileHandler.getmTopDirectory().getPath() + "/" + itemName;
+				DICOMReader dicomReader = new DICOMReader(filePath);
 				DICOMMetaInformation metaInformation = dicomReader
 						.parseMetaInformation();
 				dicomReader.close();
@@ -271,7 +266,8 @@ public class MainActivity extends ListActivity {
 		super.onSaveInstanceState(outState);
 
 		// Save the top directory absolute path
-		outState.putString(TOP_DIR_ID, mTopDirectory.getAbsolutePath());
+		String topDirPath = fileHandler.getmTopDirectory().getAbsolutePath();
+		outState.putString(TOP_DIR_ID, topDirPath);
 	}
 
 	@Override
@@ -296,12 +292,13 @@ public class MainActivity extends ListActivity {
 		// If the directory is the external storage directory or there is no
 		// parent,
 		// super.onBackPressed(). Else goes to the parent directory.
-		if (mTopDirectory.getParent() == null
-				|| mTopDirectory.equals(Environment
+		if (fileHandler.getmTopDirectory().getParent() == null
+				|| fileHandler.getmTopDirectory().equals(Environment
 						.getExternalStorageDirectory())) {
 			super.onBackPressed();
 		} else {
-			mTopDirectory = mTopDirectory.getParentFile();
+			File parentFile = fileHandler.getmTopDirectory().getParentFile();
+			fileHandler.setmTopDirectory(parentFile);
 			fill();
 		}
 	}
@@ -352,128 +349,11 @@ public class MainActivity extends ListActivity {
 	 * Updates the view's content.
 	 */
 	private void fill() {
-		// If the external storage is not available, we cannot
-		// fill the view
-		if (!ExternalStorage.checkAvailable())
-			return;
-
-		// Gets the children directories and the files of the top directory
-		File[] childrenFiles = mTopDirectory.listFiles();
-
-		// Declares the directories and the files array
-		List<String> directoryList = new ArrayList<String>();
-		List<String> fileList = new ArrayList<String>();
-
-		// Loops on every child
-		for (File child : childrenFiles) {
-			// If it is a directory
-			if (child.isDirectory()) {
-				String directoryName = child.getName();
-				if (directoryName.charAt(0) != '.') {
-					//TODO: add support for DICOMDIR corresponding to 1 exam of a given patient
-					if(containsValidDicomFiles(child)) {
-						//Change the name of the dir to reflect patient informations.
-						//A click on the dir should directly open the corresponding exam.
-					}
-					directoryList.add("/" + child.getName());
-				}
-			} else { // If it is a file.
-				String[] fileName = child.getName().split("\\.");
-
-				if (!child.isHidden()) {
-					if (fileName.length > 1) {
-						// DICOM files which have no extension or a 'dcm' extension
-						if (fileName[fileName.length - 1]
-								.equalsIgnoreCase("dcm") && isValidDicomFile(child)) {
-							InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
-							dicomProv.read(child);
-							Map<String, String> patientInfos = dicomProv.getPatientInfos();
-							fileList.add(patientInfos.get("Patient Name") + " "
-									+ patientInfos.get("Patient age") + " "
-									+ patientInfos.get("Patient sex"));
-							fileList.add(child.getName());
-						} 
-					}
-				}
-			}
-		}
-
-		// Sorts both list
-		Collections.sort(directoryList, String.CASE_INSENSITIVE_ORDER);
-		Collections.sort(fileList, String.CASE_INSENSITIVE_ORDER);
-
-		// Sets the number of dicom files
-		mTotal = fileList.size();
-
-		// Output list will be files before directories
-		// then we add the directoryList to the fileList
-		fileList.addAll(directoryList);
-
-		if (!mTopDirectory.equals(Environment.getExternalStorageDirectory())) {
-			fileList.add(0, "..");
-		}
-
+		//The file handler computes and returns the list
+		List<String> fileList = fileHandler.fill();
 		mAdapter = new ArrayAdapter<String>(this, R.layout.file_chooser_item,
-				R.id.fileName, fileList);
+				R.id.fileName, fileList );
 		setListAdapter(mAdapter);
-	}
-
-	/**
-	 * Determines if a directory is a valid Dicom directory. Use it to fill the list correctly
-	 */
-	private boolean containsValidDicomFiles(File dir) {
-		return (containsDicomFiles(dir) && isValidDicomDir(dir));
-	}
-
-	/**
-	 * Determines if a directory contains at least one Dicom file.
-	 */
-	private boolean containsDicomFiles(File dir) {
-		for (File child : dir.listFiles()) {
-			if (!child.isDirectory()) {
-				String[] fileName = child.getName().split("\\.");
-				if (fileName[fileName.length - 1].equalsIgnoreCase("dcm")) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Determines if a file is a valid Dicom file. Used to fill the files list correctly.
-	 */
-	private boolean isValidDicomFile(File child) {
-		try {
-			// Create a DICOMReader to parse meta informations
-			DICOMReader dicomReader = new DICOMReader(child);
-			dicomReader.parseMetaInformation();
-			dicomReader.close();
-		} catch (Exception ex) {
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Determines if a directory contains valid Dicom files.
-	 */
-	private boolean isValidDicomDir(File dir) {
-		for (File child : dir.listFiles()) {
-			try {
-				// Ignores sub-directories
-				if (!child.isDirectory()) {
-					// Create a DICOMReader to parse meta informations
-					DICOMReader dicomReader = new DICOMReader(child);
-					dicomReader.parseMetaInformation();
-					dicomReader.close();
-				}
-			} catch (Exception ex) {
-				return false;
-			}
-		}
-		//TODO: take into account the case when a dir only contains sub-dirs and no files.
-		return true;
 	}
 
 	/**
