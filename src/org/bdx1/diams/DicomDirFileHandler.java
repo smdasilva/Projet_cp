@@ -33,6 +33,9 @@ public class DicomDirFileHandler implements FileHandler {
 		if (!ExternalStorage.checkAvailable())
 			return fileList;
 
+		// Resets fileList
+		fileList.clear();
+		
 		// Gets the children directories and the files of the top directory
 		File[] childrenFiles = mTopDirectory.listFiles();
 
@@ -56,7 +59,7 @@ public class DicomDirFileHandler implements FileHandler {
 
 				if (!child.isHidden()) {
 					if (fileName.length > 1) {
-						// DICOM files which have no extension or a 'dcm' extension
+						// DICOM files which have a 'dcm' extension
 						if (fileName[fileName.length - 1]
 								.equalsIgnoreCase("dcm") && isValidDicomFile(child)) {
 							InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
