@@ -1,5 +1,9 @@
 package org.bdx1.diams;
 
+import org.bdx1.diams.model.Mask;
+import org.bdx1.diams.model.InfiniteMask;
+import org.bdx1.diams.util.CantorPair;
+import org.bdx1.diams.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,87 +19,112 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class DrawView extends View implements OnTouchListener {
-    List<Point> points = new ArrayList<Point>();
-    //Paint paint = new Paint();
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+private static final String TAG = "DrawView";
 
+private static final float MINP = 0.25f;
+private static final float MAXP = 0.75f;
 
-    public DrawView(Context context) {
-        super(context);
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-        this.setOnTouchListener(this);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(2);
-        //paint.setColor(Color.WHITE);
+private Canvas  mCanvas;
+private Path    mPath;
+private Paint       mPaint;   
+private ArrayList<Path> paths = new ArrayList<Path>();
+private Mask mask = new InfiniteMask();
+
+public DrawView(Context context) {
+    super(context);
+    setFocusable(true);
+    setFocusableInTouchMode(true);
+
+    this.setOnTouchListener(this);
+
+    mPaint = new Paint();
+    mPaint.setAntiAlias(true);
+    mPaint.setDither(true);
+    mPaint.setColor(Color.BLACK);
+    mPaint.setStyle(Paint.Style.STROKE);
+    mPaint.setStrokeJoin(Paint.Join.ROUND);
+    mPaint.setStrokeCap(Paint.Cap.ROUND);
+    mPaint.setStrokeWidth(3);
+    mCanvas = new Canvas();
+    mPath = new Path();
+    paths.add(mPath);
+
+}               
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
-    	 Path path = new Path();
+    protected void onDraw(Canvas canvas) {            
 
-    	    if(points.size() > 1){
-    	        for(int i = points.size() - 2; i < points.size(); i++){
-    	            if(i >= 0){
-    	                Point point = points.get(i);
-
-    	                if(i == 0){
-    	                    Point next = points.get(i + 1);
-    	                    point.dx = ((next.x - point.x) / 3);
-    	                    point.dy = ((next.y - point.y) / 3);
-    	                }
-    	                else if(i == points.size() - 1){
-    	                    Point prev = points.get(i - 1);
-    	                    point.dx = ((point.x - prev.x) / 3);
-    	                    point.dy = ((point.y - prev.y) / 3);
-    	                }
-    	                else{
-    	                    Point next = points.get(i + 1);
-    	                    Point prev = points.get(i - 1);
-    	                    point.dx = ((next.x - prev.x) / 3);
-    	                    point.dy = ((next.y - prev.y) / 3);
-    	                }
-    	            }
-    	        }
-    	    }
-
-    	    boolean first = true;
-    	    for(int i = 0; i < points.size(); i++){
-    	        Point point = points.get(i);
-    	        if(first){
-    	            first = false;
-    	            path.moveTo(point.x, point.y);
-    	        }
-    	        else{
-    	            Point prev = points.get(i - 1);
-    	            path.cubicTo(prev.x + prev.dx, prev.y + prev.dy, point.x - point.dx, point.y - point.dy, point.x, point.y);
-    	        }
-    	    }
-    	    canvas.drawPath(path, paint);
-    }
-
-    public boolean onTouch(View view, MotionEvent event) {
-    	if(event.getAction() != MotionEvent.ACTION_UP){
-            Point point = new Point();
-            point.x = event.getX();
-            point.y = event.getY();
-            points.add(point);
-            invalidate();
-            //Log.d(TAG, "point: " + point);
-            return true;
+        for (Path p : paths){
+            canvas.drawPath(p, mPaint);
         }
-        return super.onTouchEvent(event);
-}
-
-class Point {
-    float x, y;
-    float dx, dy;
-
-    @Override
-    public String toString() {
-        return x + ", " + y;
+        
+        /*
+        Pair<Integer, Integer> paire = new Pair<Integer, Integer>(0,0);
+        for (Integer p : mask.getMask()){
+        	paire = CantorPair.decode(p);
+        	int x = paire.getFirst();
+        	int y = paire.getSecond();
+        	canvas.drawPoint(x, y, mPaint);
+            //System.out.println("("+ x +"," +y+ ")");
+        }*/
     }
-}
 
+    private float mX, mY;
+    private static final float TOUCH_TOLERANCE = 4;
+
+    private void touch_start(float x, float y) {
+    	mPath.reset();
+        mPath.moveTo(x, y);
+        mask.setPixel((int)x, (int)y, true);
+        //mCanvas.drawPoint(x, y, mPaint);
+        mX = x;
+        mY = y;
+    }
+    private void touch_move(float x, float y) {
+    	mask.setPixel((int)x, (int)y, true);
+    	float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
+            mX = x;
+            mY = y;
+            //mask.setPixel((int)x, (int)y, true);
+        }
+    }
+    private void touch_up() {
+    	mPath.lineTo(mX, mY);
+        // commit the path to our offscreen
+        mCanvas.drawPath(mPath, mPaint);
+        // kill this so we don't double draw            
+        mPath = new Path();
+        paths.add(mPath);
+    }
+
+
+
+public boolean onTouch(View arg0, MotionEvent event) {
+      float x = event.getX();
+      float y = event.getY();
+
+      switch (event.getAction()) {
+          case MotionEvent.ACTION_DOWN:
+        	  //System.out.println("down");
+              touch_start(x, y);
+        	  invalidate();
+              break;
+          case MotionEvent.ACTION_MOVE:
+              touch_move(x, y);
+              invalidate();
+              break;
+          case MotionEvent.ACTION_UP:
+              touch_up();
+              invalidate();
+              break;
+      }
+      return true;
+	}
 }
