@@ -36,8 +36,9 @@ public class DicomDirFileHandler implements FileHandler {
 		if (!ExternalStorage.checkAvailable())
 			return fileList;
 
-		// Resets fileList
+		// Resets fileList and DicomDirAndConcretFiles
 		fileList.clear();
+		DicomDirAndConcretFiles.clear();
 		currentFileposition = 0;
 		
 		// Gets the children directories and the files of the top directory
@@ -182,5 +183,13 @@ public class DicomDirFileHandler implements FileHandler {
 	
 	public File getmTopDirectory() {
 		return this.mTopDirectory;
+	}
+
+	public File getClickedDicomDir(Integer position) {
+		if(DicomDirAndConcretFiles.containsKey(position)) {
+			return DicomDirAndConcretFiles.get(position);
+		} else {
+			return null;
+		}
 	}
 }

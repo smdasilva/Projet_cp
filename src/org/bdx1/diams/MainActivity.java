@@ -189,69 +189,73 @@ public class MainActivity extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 
 		String itemName = mAdapter.getItem(position);
-
-		// If it is a directory, displays its content
-		if (itemName.charAt(0) == '/') {
-			String clickedPath = fileHandler.getmTopDirectory().getPath() + itemName;
-			fileHandler.setmTopDirectory(new File(clickedPath));
-			fill();
-			// If itemNam = ".." go to parent directory
-		} else if (itemName.equals("..")) {
-			File parentFile = fileHandler.getmTopDirectory().getParentFile();
-			fileHandler.setmTopDirectory(parentFile);
-			fill();
-			// If it is a file.
+		
+		if (fileHandler.getClickedDicomDir(position) != null) {
+			//TODO: instantiate the exam.
 		} else {
-			try {
-				// Create a DICOMReader to parse meta informations
-				String filePath = fileHandler.getmTopDirectory().getPath() + "/" + itemName;
-				DICOMReader dicomReader = new DICOMReader(filePath);
-				DICOMMetaInformation metaInformation = dicomReader
-						.parseMetaInformation();
-				dicomReader.close();
-
-				if (metaInformation.getSOPClassUID().equals(
-						"1.2.840.10008.1.3.10")) {
+			// If it is a directory, displays its content
+			if (itemName.charAt(0) == '/') {
+				String clickedPath = fileHandler.getmTopDirectory().getPath() + itemName;
+				fileHandler.setmTopDirectory(new File(clickedPath));
+				fill();
+				// If itemNam = ".." go to parent directory
+			} else if (itemName.equals("..")) {
+				File parentFile = fileHandler.getmTopDirectory().getParentFile();
+				fileHandler.setmTopDirectory(parentFile);
+				fill();
+				// If it is a file.
+			} else {
+				try {
+					// Create a DICOMReader to parse meta informations
+					String filePath = fileHandler.getmTopDirectory().getPath() + "/" + itemName;
+					DICOMReader dicomReader = new DICOMReader(filePath);
+					DICOMMetaInformation metaInformation = dicomReader
+							.parseMetaInformation();
+					dicomReader.close();
+	
+					if (metaInformation.getSOPClassUID().equals(
+							"1.2.840.10008.1.3.10")) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(this);
+						builder.setMessage(
+								"Media Storage Directory (DICOMDIR) are not supported yet.")
+								.setTitle("[ERROR] Opening file " + itemName)
+								.setCancelable(false)
+								.setPositiveButton("Close",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog, int id) {
+												// Do nothing
+											}
+										});
+						AlertDialog alertDialog = builder.create();
+						alertDialog.show();
+					} else {
+						/*
+						 * // Open the DICOM Viewer Intent intent = new Intent(this,
+						 * DICOMViewer.class); intent.putExtra("DICOMFileName",
+						 * mTopDirectory.getPath() + "/" + itemName);
+						 * intent.putExtra("FileCount", mTotal);
+						 * startActivity(intent);
+						 */
+					}
+	
+				} catch (Exception ex) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setMessage(
-							"Media Storage Directory (DICOMDIR) are not supported yet.")
+							"Error while opening the file " + itemName + ". \n"
+									+ ex.getMessage())
 							.setTitle("[ERROR] Opening file " + itemName)
 							.setCancelable(false)
 							.setPositiveButton("Close",
 									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
+										public void onClick(DialogInterface dialog,
+												int id) {
 											// Do nothing
 										}
 									});
 					AlertDialog alertDialog = builder.create();
 					alertDialog.show();
-				} else {
-					/*
-					 * // Open the DICOM Viewer Intent intent = new Intent(this,
-					 * DICOMViewer.class); intent.putExtra("DICOMFileName",
-					 * mTopDirectory.getPath() + "/" + itemName);
-					 * intent.putExtra("FileCount", mTotal);
-					 * startActivity(intent);
-					 */
 				}
-
-			} catch (Exception ex) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setMessage(
-						"Error while opening the file " + itemName + ". \n"
-								+ ex.getMessage())
-						.setTitle("[ERROR] Opening file " + itemName)
-						.setCancelable(false)
-						.setPositiveButton("Close",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										// Do nothing
-									}
-								});
-				AlertDialog alertDialog = builder.create();
-				alertDialog.show();
 			}
 		}
 	}

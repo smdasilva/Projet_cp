@@ -32,5 +32,13 @@ public interface FileHandler {
 	 * @param file the new top directory.
 	 */
 	public abstract void setmTopDirectory(File file);
+	
+	/**
+	 * Gets the clicked DicomDir if it exists.
+	 * @param position the index of the clicked element.
+	 * @return a file representing the clicked element, or null if it isn't
+	 * a DicomDir.
+	 */
+	public abstract File getClickedDicomDir(Integer position);
 
 }
