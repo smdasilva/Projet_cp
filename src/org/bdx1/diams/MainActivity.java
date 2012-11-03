@@ -189,10 +189,12 @@ public class MainActivity extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 
 		String itemName = mAdapter.getItem(position);
-		
-		if (fileHandler.getClickedDicomDir(position) != null) {
-			//TODO: instantiate the exam.
-		} else {
+		File clickedFile = fileHandler.getClickedDicomDir(position);
+		if (clickedFile != null) {
+			//TODO: pass the exam to the drawing view.
+			System.out.println("MAKING A NEW EXAM");
+			Factory.MODEL_FACTORY.makeExamen(clickedFile);
+		} else { //TODO: clean up this part.
 			// If it is a directory, displays its content
 			if (itemName.charAt(0) == '/') {
 				String clickedPath = fileHandler.getmTopDirectory().getPath() + itemName;
