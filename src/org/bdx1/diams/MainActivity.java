@@ -185,7 +185,7 @@ public class MainActivity extends ListActivity {
 	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-
+		//TODO: add a toast ("please wait") to tell the user that the program is working.
 		super.onListItemClick(l, v, position, id);
 
 		String itemName = mAdapter.getItem(position);

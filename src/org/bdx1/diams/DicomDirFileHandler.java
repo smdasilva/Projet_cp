@@ -3,6 +3,7 @@ package org.bdx1.diams;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ public class DicomDirFileHandler implements FileHandler {
 	private File mTopDirectory;
 	private int numberOfSlice = 0;
 	private List<String> fileList = new ArrayList<String>();
+	private Map<Integer, File> DicomDirAndConcretFiles = new HashMap<Integer, File>();
+	private Integer currentFileposition = 0;
 
 	public DicomDirFileHandler(File topDir) {
 		mTopDirectory = topDir;
@@ -35,28 +38,43 @@ public class DicomDirFileHandler implements FileHandler {
 
 		// Resets fileList
 		fileList.clear();
+		currentFileposition = 0;
 		
 		// Gets the children directories and the files of the top directory
 		File[] childrenFiles = mTopDirectory.listFiles();
 
 		// Declares the directories and the files array
 		List<String> directoryList = new ArrayList<String>();
+		
+		if (!mTopDirectory.equals(Environment.getExternalStorageDirectory())) {
+			fileList.add(0, "..");
+			currentFileposition += 1;
+		}
+		
 		// Loops on every child
 		for (File child : childrenFiles) {
 			// If it is a directory
 			if (child.isDirectory()) {
 				String directoryName = child.getName();
 				if (directoryName.charAt(0) != '.') {
-					//TODO: add support for DICOMDIR corresponding to 1 exam of a given patient
 					if(containsValidDicomFiles(child)) {
-						//Change the name of the dir to reflect patient informations.
-						//A click on the dir should directly open the corresponding exam.
+						// Creates a link between objects in the displayed list and real files.
+						File patientDefaultFile = getPatientFileFromDir(child);
+						DicomDirAndConcretFiles.put(currentFileposition, patientDefaultFile);
+						// Changes the name of the dir to reflect patient informations.
+						InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
+						dicomProv.read(patientDefaultFile);
+						Map<String, String> patientInfos = dicomProv.getPatientInfos();
+						//TODO: distinction between different exams of a same patient (date, id etc.)
+						directoryList.add("/" + patientInfos.get("Patient Name") + " "
+								+ patientInfos.get("Patient age") + " "
+								+ patientInfos.get("Patient sex"));
+					} else {
+						directoryList.add("/" + child.getName());
 					}
-					directoryList.add("/" + child.getName());
 				}
-			} else { // If it is a file.
+			} /*else { // If it is a file.
 				String[] fileName = child.getName().split("\\.");
-
 				if (!child.isHidden()) {
 					if (fileName.length > 1) {
 						// DICOM files which have a 'dcm' extension
@@ -72,23 +90,21 @@ public class DicomDirFileHandler implements FileHandler {
 						} 
 					}
 				}
-			}
+			}*/
+			currentFileposition += 1;
 		}
 
 		// Sorts both list
 		Collections.sort(directoryList, String.CASE_INSENSITIVE_ORDER);
 		Collections.sort(fileList, String.CASE_INSENSITIVE_ORDER);
 
-		// Sets the number of dicom files
+		// Sets the number of dicom files... Not used for now
 		numberOfSlice = fileList.size();
 
 		// Output list will be files before directories
 		// then we add the directoryList to the fileList
 		fileList.addAll(directoryList);
 
-		if (!mTopDirectory.equals(Environment.getExternalStorageDirectory())) {
-			fileList.add(0, "..");
-		}
 		return fileList;
 	}
 	
@@ -116,8 +132,9 @@ public class DicomDirFileHandler implements FileHandler {
 
 	/**
 	 * Determines if a file is a valid Dicom file. Used to fill the files list correctly.
+	 * CAUTION: may become deprecated soon.
 	 */
-	public boolean isValidDicomFile(File child) {
+	private boolean isValidDicomFile(File child) {
 		try {
 			// Create a DICOMReader to parse meta informations
 			DICOMReader dicomReader = new DICOMReader(child);
@@ -146,8 +163,30 @@ public class DicomDirFileHandler implements FileHandler {
 				return false;
 			}
 		}
-		//TODO: take into account the case when a dir only contains sub-dirs and no files.
 		return true;
+	}
+	
+	/**
+	 * Returns the first valid Dicom file that will be used as the default
+	 * slice when the DicomDir is opened as an exam.
+	 */
+	private File getPatientFileFromDir(File dir) {
+		for (File child : dir.listFiles()) {
+			try {
+				// Ignores sub-directories
+				if (!child.isDirectory()) {
+					// Create a DICOMReader to parse meta informations
+					DICOMReader dicomReader = new DICOMReader(child);
+					dicomReader.parseMetaInformation();
+					dicomReader.close();
+					// Returns the first valid Dicom file
+					return child;
+				}
+			} catch (Exception ex) {
+				// Do nothing
+			}
+		}
+		return null;
 	}
 
 	public int getNumberOfSlice() {
