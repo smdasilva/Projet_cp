@@ -73,24 +73,7 @@ public class DicomDirFileHandler implements FileHandler {
 						directoryList.add("/" + child.getName());
 					}
 				}
-			} /*else { // If it is a file.
-				String[] fileName = child.getName().split("\\.");
-				if (!child.isHidden()) {
-					if (fileName.length > 1) {
-						// DICOM files which have a 'dcm' extension
-						if (fileName[fileName.length - 1]
-								.equalsIgnoreCase("dcm") && isValidDicomFile(child)) {
-							InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
-							dicomProv.read(child);
-							Map<String, String> patientInfos = dicomProv.getPatientInfos();
-							fileList.add(patientInfos.get("Patient Name") + " "
-									+ patientInfos.get("Patient age") + " "
-									+ patientInfos.get("Patient sex"));
-							fileList.add(child.getName());
-						} 
-					}
-				}
-			}*/
+			}
 			currentFileposition += 1;
 		}
 
