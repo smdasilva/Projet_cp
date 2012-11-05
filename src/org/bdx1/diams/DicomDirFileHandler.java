@@ -73,14 +73,14 @@ public class DicomDirFileHandler implements FileHandler {
 					} else {
 						directoryList.add("/" + child.getName());
 					}
+					currentFileposition += 1;
 				}
 			}
-			currentFileposition += 1;
 		}
 
 		// Sorts both list
-		Collections.sort(directoryList, String.CASE_INSENSITIVE_ORDER);
-		Collections.sort(fileList, String.CASE_INSENSITIVE_ORDER);
+		//Collections.sort(directoryList, String.CASE_INSENSITIVE_ORDER);
+		//Collections.sort(fileList, String.CASE_INSENSITIVE_ORDER);
 
 		// Sets the number of dicom files... Not used for now
 		numberOfSlice = fileList.size();

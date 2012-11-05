@@ -106,6 +106,8 @@ public class MainActivity extends ListActivity {
 	 */
 	private LinearLayout mMainLayout;
 
+	private DiamsApplication mApplication;
+
 	// ---------------------------------------------------------------
 	// # <override> FUNCTIONS
 	// ---------------------------------------------------------------
@@ -129,6 +131,7 @@ public class MainActivity extends ListActivity {
 		if (ExternalStorage.checkAvailable()) {
 			// If this activity was paused and resumed, then restores its saved
 			// state
+			mApplication = ((DiamsApplication) getApplication());
 			if (savedInstanceState != null) {
 				String topDirectoryString = savedInstanceState
 						.getString(TOP_DIR_ID);
@@ -193,7 +196,10 @@ public class MainActivity extends ListActivity {
 		if (clickedFile != null) {
 			//TODO: pass the exam to the drawing view.
 			System.out.println("MAKING A NEW EXAM");
-			Factory.MODEL_FACTORY.makeExamen(clickedFile);
+			Examen ex = Factory.MODEL_FACTORY.makeExamen(clickedFile);
+			mApplication.setCurrentExamen(ex);
+			Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
+	        startActivity(intent);
 		} else { //TODO: clean up this part.
 			// If it is a directory, displays its content
 			if (itemName.charAt(0) == '/') {
