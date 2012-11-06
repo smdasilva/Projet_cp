@@ -17,7 +17,7 @@ public class ImageActivity extends Activity {
         setContentView(R.layout.activity_image);
         DiamsImageView imgView = (DiamsImageView) findViewById(R.id.imageView);
         Examen ex = ((DiamsApplication) getApplication()).getCurrentExamen();
-        imgView.setImage(ex.getSlice(0).getImage());
+        imgView.setSlice(ex.getSlice(0));
     }
 
     @Override

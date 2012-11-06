@@ -1,17 +1,14 @@
 package org.bdx1.diams.views;
 
-import org.bdx1.diams.R;
-import org.bdx1.diams.model.Image;
+import org.bdx1.diams.image.ImageTranscriber;
+import org.bdx1.diams.model.Slice;
 
 import android.content.Context;
-import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -20,7 +17,7 @@ import android.view.View;
  */
 public class DiamsImageView extends View {
 
-    private Image img;
+    private Slice slice;
     private Paint p;
 
     public DiamsImageView(Context context) {
@@ -46,19 +43,17 @@ public class DiamsImageView extends View {
         p.setColorFilter(filter);
     }
     
-    public void setImage(Image newImage) {
-        img = newImage;
+    public void setSlice(Slice newSlice) {
+        slice = newSlice;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (img != null) {
-            
-            canvas.drawBitmap(img.getData(), 0, img.getWidth(), 0, 0,
-                img.getWidth(), img.getHeight(),
-                false, p);
+        if(slice != null) {
+            Bitmap bitmap = ImageTranscriber.transcribeSlice(slice);
+            canvas.drawBitmap(bitmap, 0, 0, p);
         }
     }
 }
