@@ -11,11 +11,12 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 
 /**
  * TODO: document your custom view class.
  */
-public class DiamsImageView extends View {
+public class DiamsImageView extends ImageView {
 
     private Slice slice;
     private Paint p;
@@ -25,10 +26,12 @@ public class DiamsImageView extends View {
 
     public void setWindowCenter(int windowCenter) {
         this.windowCenter = windowCenter;
+        updateBitmap();
     }
 
     public void setWindowWidth(int windowWidth) {
         this.windowWidth = windowWidth;
+        updateBitmap();
     }
 
     public DiamsImageView(Context context) {
@@ -50,21 +53,16 @@ public class DiamsImageView extends View {
         ColorMatrix matrix = new ColorMatrix();
         //matrix.setSaturation(0);
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-        p = new Paint();
-        p.setColorFilter(filter);
+        this.setColorFilter(filter);
     }
     
     public void setSlice(Slice newSlice) {
         slice = newSlice;
+        updateBitmap();
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if(slice != null) {
-            Bitmap bitmap = ImageTranscriber.transcribeSlice(slice, windowCenter, windowWidth);
-            canvas.drawBitmap(bitmap, 0, 0, p);
-        }
+    private void updateBitmap() {
+        Bitmap bmp = ImageTranscriber.transcribeSlice(slice, windowCenter, windowWidth);
+        this.setImageBitmap(bmp);
     }
 }
