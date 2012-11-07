@@ -19,6 +19,17 @@ public class DiamsImageView extends View {
 
     private Slice slice;
     private Paint p;
+    
+    private int windowCenter=0;
+    private int windowWidth=1024;
+
+    public void setWindowCenter(int windowCenter) {
+        this.windowCenter = windowCenter;
+    }
+
+    public void setWindowWidth(int windowWidth) {
+        this.windowWidth = windowWidth;
+    }
 
     public DiamsImageView(Context context) {
         super(context);
@@ -37,7 +48,7 @@ public class DiamsImageView extends View {
 
     private void init() {
         ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
+        //matrix.setSaturation(0);
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
         p = new Paint();
         p.setColorFilter(filter);
@@ -52,7 +63,7 @@ public class DiamsImageView extends View {
         super.onDraw(canvas);
 
         if(slice != null) {
-            Bitmap bitmap = ImageTranscriber.transcribeSlice(slice);
+            Bitmap bitmap = ImageTranscriber.transcribeSlice(slice, windowCenter, windowWidth);
             canvas.drawBitmap(bitmap, 0, 0, p);
         }
     }

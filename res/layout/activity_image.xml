@@ -18,7 +18,23 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="View Infos" 
+        android:text="@string/show_infos" 
         android:onClick="showInfos"/>
+
+    <SeekBar
+        android:id="@+id/widthSlider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:max="512" />
+
+    <SeekBar
+        android:id="@+id/centerSlider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/widthSlider"
+        android:layout_alignParentLeft="true"
+        android:max="4096" />
 
 </RelativeLayout>
