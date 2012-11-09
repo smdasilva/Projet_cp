@@ -8,16 +8,55 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class ImageActivity extends Activity {
 
+    private DiamsImageView imageView;
+    private SeekBar centerSlider;
+    private SeekBar widthSlider;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        DiamsImageView imgView = (DiamsImageView) findViewById(R.id.imageView);
+        
+        imageView = (DiamsImageView) findViewById(R.id.imageView);
+        
+        centerSlider = (SeekBar) findViewById(R.id.centerSlider);
+        widthSlider = (SeekBar) findViewById(R.id.widthSlider);
+        
+        centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            
+            public void onStopTrackingTouch(SeekBar seekBar) {                
+            }
+            
+            public void onStartTrackingTouch(SeekBar seekBar) {                
+            }
+            
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                    boolean fromUser) {
+                changeWindowCenter(progress);
+            }
+        });
+        
+        widthSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            
+            public void onStopTrackingTouch(SeekBar seekBar) {                
+            }
+            
+            public void onStartTrackingTouch(SeekBar seekBar) {                
+            }
+            
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                    boolean fromUser) {
+                changeWindowWidth(progress);
+            }
+        });
+        
         Examen ex = ((DiamsApplication) getApplication()).getCurrentExamen();
-        imgView.setImage(ex.getSlice(0).getImage());
+        imageView.setSlice(ex.getSlice(0));
     }
 
     @Override
@@ -29,5 +68,15 @@ public class ImageActivity extends Activity {
     public void showInfos(View v) {
         Intent intent = new Intent(getApplicationContext(), InfoDisplayActivity.class);
         startActivity(intent);
+    }
+    
+    public void changeWindowCenter(int newCenter) {
+        imageView.setWindowCenter(newCenter);
+        imageView.invalidate();
+    }
+    
+    public void changeWindowWidth(int newWidth) {
+        imageView.setWindowWidth(newWidth);
+        imageView.invalidate();
     }
 }
