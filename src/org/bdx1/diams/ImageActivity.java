@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Slice;
-import org.bdx1.diams.model.SliceTest;
 import org.bdx1.diams.views.DiamsImageView;
 
 import android.app.Activity;
