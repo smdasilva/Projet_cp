@@ -20,7 +20,6 @@ import android.widget.ImageView;
 public class DiamsImageView extends ImageView {
 
     private Slice slice;
-    private Paint p;
     
     private int windowCenter=0;
     private int windowWidth=1024;
@@ -61,7 +60,7 @@ public class DiamsImageView extends ImageView {
     public void setSlice(Slice newSlice) {
         slice = newSlice;
         updateBitmap();
-        centerImage();
+        //centerImage();
     }
 
     private void updateBitmap() {

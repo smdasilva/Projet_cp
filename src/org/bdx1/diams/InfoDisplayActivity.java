@@ -22,7 +22,7 @@ public class InfoDisplayActivity extends Activity {
         exam = app.getCurrentExamen();
         InfosView view = (InfosView) findViewById(R.id.infos);
         if (exam != null)
-            view.setExamen(exam);
+            view.setExamen(exam, exam.getSlice(app.getCurrentSliceIndex()));
     }
 
     @Override
