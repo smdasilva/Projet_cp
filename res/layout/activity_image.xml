@@ -4,15 +4,6 @@
     android:layout_height="fill_parent"
     tools:context=".ImageActivity" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="showInfos"
-        android:text="@string/show_infos" />
-
     <org.bdx1.diams.views.DiamsImageView
         android:id="@+id/imageView"
         android:layout_width="fill_parent"
@@ -47,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_weight="1"
                 android:text="Center :"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/blue" />
@@ -58,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="false"
                 android:layout_toRightOf="@id/centerSliderText"
-                android:layout_weight="1"
                 android:max="4096" />
 
             <TextView
@@ -68,7 +57,6 @@
                 android:layout_alignParentBottom="false"
                 android:layout_alignParentLeft="false"
                 android:layout_below="@id/centerSlider"
-                android:layout_weight="1"
                 android:text="Width :"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/blue" />
@@ -81,10 +69,35 @@
                 android:layout_alignParentLeft="false"
                 android:layout_below="@id/centerSlider"
                 android:layout_toRightOf="@id/widthSliderText"
-                android:layout_weight="1"
                 android:max="512" />
-
         </RelativeLayout>
     </SlidingDrawer>
+
+    <TextView
+        android:id="@+id/sliceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/sliceInc"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/sliceText"
+        android:onClick="incrementSlice"
+        android:text=">" />
+
+    <Button
+        android:id="@+id/sliceDec"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/sliceText"
+        android:onClick="decrementSlice"
+        android:text="&lt;" />
 
 </RelativeLayout>
