@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Slice;
+import org.bdx1.diams.model.SliceTest;
 import org.bdx1.diams.views.DiamsImageView;
 
 import android.app.Activity;
@@ -11,6 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -24,6 +27,8 @@ public class ImageActivity extends Activity {
     private TextView widthText;
     private DiamsApplication app;
     private StringBuilder builder = new StringBuilder();
+    private Button sliceInc, sliceDec;
+    private TextView sliceText;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,10 @@ public class ImageActivity extends Activity {
         centerSlider.setProgress(windowCenter);
         widthSlider.setProgress(windowWidth);
         
+        sliceInc = (Button) findViewById(R.id.sliceInc);
+        sliceDec = (Button) findViewById(R.id.sliceDec);
+        sliceText = (TextView) findViewById(R.id.sliceText);
+        sliceText.setText("Slice "+(app.getCurrentSliceIndex()+1)+"/"+app.getCurrentExamen().getNumberOfSlices());
     }
 
     @Override
@@ -106,7 +115,7 @@ public class ImageActivity extends Activity {
         builder.delete(0, builder.length());
         builder.append("Center : ");
         builder.append(newCenter);
-        centerText.setText(builder.toString(), TextView.BufferType.EDITABLE);
+        centerText.setText(builder, TextView.BufferType.EDITABLE);
         imageView.invalidate();
     }
     
@@ -115,11 +124,32 @@ public class ImageActivity extends Activity {
         builder.delete(0, builder.length());
         builder.append("Width : ");
         builder.append(newWidth);
-        widthText.setText(builder.toString(), TextView.BufferType.EDITABLE);
+        widthText.setText(builder, TextView.BufferType.EDITABLE);
         imageView.invalidate();
     }
     
+    public void decrementSlice(View v) {
+        app.setCurrentSliceIndex(app.getCurrentSliceIndex()-1);
+        if (app.getCurrentSliceIndex()<=0) sliceDec.setEnabled(false);
+        sliceInc.setEnabled(true);
+        sliceChanged();
+    }
+    
+    public void incrementSlice(View v) {
+        app.setCurrentSliceIndex(app.getCurrentSliceIndex()+1);
+        if (app.getCurrentSliceIndex()>=app.getCurrentExamen().getNumberOfSlices()-1)
+            sliceInc.setEnabled(false);
+        sliceDec.setEnabled(true);
+        sliceChanged();
+    }
+    
     public void sliceChanged() {
+        builder.delete(0, builder.length());
+        builder.append("Slice ");
+        builder.append(app.getCurrentSliceIndex()+1);
+        builder.append("/");
+        builder.append(app.getCurrentExamen().getNumberOfSlices());
+        sliceText.setText(builder);
         imageView.setSlice(app.getCurrentExamen().getSlice(app.getCurrentSliceIndex()));
     }
 }
