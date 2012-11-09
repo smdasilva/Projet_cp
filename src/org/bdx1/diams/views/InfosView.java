@@ -3,6 +3,7 @@ package org.bdx1.diams.views;
 import java.util.Map;
 
 import org.bdx1.diams.model.Examen;
+import org.bdx1.diams.model.Slice;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -20,7 +21,7 @@ public class InfosView extends TextView {
         super(context, attributes);
     }
 
-    public void setExamen(Examen ex) {
+    public void setExamen(Examen ex, Slice current) {
         this.examen = ex;
 
         StringBuilder builder = new StringBuilder();
@@ -40,6 +41,15 @@ public class InfosView extends TextView {
             builder.append(key);
             builder.append(" : ");
             builder.append(studyInfos.get(key));
+            builder.append("\n");
+        }
+        builder.append("\nSlice Infos :\n");
+        Map<String, String> sliceInfos = current.getInfos();
+        for (String key : sliceInfos.keySet()) {
+            builder.append('\t');
+            builder.append(key);
+            builder.append(" : ");
+            builder.append(sliceInfos.get(key));
             builder.append("\n");
         }
 

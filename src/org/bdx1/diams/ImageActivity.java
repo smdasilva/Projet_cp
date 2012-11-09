@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -65,7 +66,18 @@ public class ImageActivity extends Activity {
         return true;
     }
     
-    public void showInfos(View v) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.show_infos:
+            showInfos();
+            return true;
+        default :
+            return super.onOptionsItemSelected(item);    
+        }
+    }
+
+    public void showInfos() {
         Intent intent = new Intent(getApplicationContext(), InfoDisplayActivity.class);
         startActivity(intent);
     }
