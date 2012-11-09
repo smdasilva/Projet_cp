@@ -1,6 +1,9 @@
 package org.bdx1.diams;
 
+import java.util.Map;
+
 import org.bdx1.diams.model.Examen;
+import org.bdx1.diams.model.Slice;
 import org.bdx1.diams.views.DiamsImageView;
 
 import android.app.Activity;
@@ -8,23 +11,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class ImageActivity extends Activity {
 
     private DiamsImageView imageView;
     private SeekBar centerSlider;
     private SeekBar widthSlider;
+    private TextView centerText;
+    private TextView widthText;
+    private DiamsApplication app;
+    private StringBuilder builder = new StringBuilder();
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
         
-        imageView = (DiamsImageView) findViewById(R.id.imageView);
+        app = (DiamsApplication) getApplication();
+        Examen ex = app.getCurrentExamen();
+        Slice currentSlice = ex.getSlice(app.getCurrentSliceIndex());
+        Map<String, String> infos = currentSlice.getInfos();
         
+        int windowCenter = Integer.parseInt(infos.get("Window center"));
+        int windowWidth = Integer.parseInt(infos.get("Window width"));
+        
+        imageView = (DiamsImageView) findViewById(R.id.imageView);
+        imageView.setSlice(currentSlice);
+
+        centerText = (TextView) findViewById(R.id.centerSliderText);
+        widthText = (TextView) findViewById(R.id.widthSliderText);
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
         widthSlider = (SeekBar) findViewById(R.id.widthSlider);
         
@@ -56,8 +74,9 @@ public class ImageActivity extends Activity {
             }
         });
         
-        Examen ex = ((DiamsApplication) getApplication()).getCurrentExamen();
-        imageView.setSlice(ex.getSlice(0));
+        centerSlider.setProgress(windowCenter);
+        widthSlider.setProgress(windowWidth);
+        
     }
 
     @Override
@@ -84,11 +103,23 @@ public class ImageActivity extends Activity {
     
     public void changeWindowCenter(int newCenter) {
         imageView.setWindowCenter(newCenter);
+        builder.delete(0, builder.length());
+        builder.append("Center : ");
+        builder.append(newCenter);
+        centerText.setText(builder.toString(), TextView.BufferType.EDITABLE);
         imageView.invalidate();
     }
     
     public void changeWindowWidth(int newWidth) {
         imageView.setWindowWidth(newWidth);
+        builder.delete(0, builder.length());
+        builder.append("Width : ");
+        builder.append(newWidth);
+        widthText.setText(builder.toString(), TextView.BufferType.EDITABLE);
         imageView.invalidate();
+    }
+    
+    public void sliceChanged() {
+        imageView.setSlice(app.getCurrentExamen().getSlice(app.getCurrentSliceIndex()));
     }
 }
