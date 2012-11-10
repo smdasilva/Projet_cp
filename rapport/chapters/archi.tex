@@ -8,3 +8,18 @@
 \section{Moteur de réseau}
 
 \section{Gestionnaire de mémoire}
+\subsection{Le système de cache}
+
+\subsection{Le masque}
+L'économie de la mémoire est un enjeu très important, encore plus présent dans ce cas
+puisqu'il s'agit d'une application sur une tablette. Le masque représente les zones sélectionnées
+par l'utilisateur, soit une matrice de booléens. Cependant stocker en plus tout une matrice est coûteux en mémoire,
+étant donné que les éléments de la matrice sont soit sélectionnés ou non (true/false), la base de la solution repose sur le fait
+de ne stocker que les coordonnées des pixels sélectionnés. Afin d'économiser encore plus au lieu de stocker 2 entiers (soit avec un tableau de longueur 2),
+ou un objet de type "Pair", on utilise la fonction de \textbf{Cantor} qui code deux entiers naturels en un seul et \textbf{unique}.
+L'interface "Mask" possède deux méthodes get/setPixel prenant en paramètre les coordonnées $(x,y)$ et la méthode prend en plus un booléen signalant
+si le pixel est sélectionné ou non.
+La classe "InfiniteMask" implémentant l'interface  "Mask" repose sur le principe suivant:
+\begin{itemize}
+\item[\textbf{setPixel(($x,y,$isselected)}] dslkmds
+\end{itemize}
