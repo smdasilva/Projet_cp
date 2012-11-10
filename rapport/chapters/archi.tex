@@ -12,14 +12,28 @@
 
 \subsection{Le masque}
 L'économie de la mémoire est un enjeu très important, encore plus présent dans ce cas
-puisqu'il s'agit d'une application sur une tablette. Le masque représente les zones sélectionnées
-par l'utilisateur, soit une matrice de booléens. Cependant stocker en plus tout une matrice est coûteux en mémoire,
-étant donné que les éléments de la matrice sont soit sélectionnés ou non (true/false), la base de la solution repose sur le fait
-de ne stocker que les coordonnées des pixels sélectionnés. Afin d'économiser encore plus au lieu de stocker 2 entiers (soit avec un tableau de longueur 2),
-ou un objet de type "Pair", on utilise la fonction de \textbf{Cantor} qui code deux entiers naturels en un seul et \textbf{unique}.
-L'interface "Mask" possède deux méthodes get/setPixel prenant en paramètre les coordonnées $(x,y)$ et la méthode prend en plus un booléen signalant
-si le pixel est sélectionné ou non.
-La classe "InfiniteMask" implémentant l'interface  "Mask" repose sur le principe suivant:
+puisqu'il s'agit d'une application sur une tablette.\\
+Le masque représente les zones sélectionnées
+par l'utilisateur, soit une matrice de booléens. Cependant, stocker en plus tout une matrice est coûteux en mémoire,
+étant donné que les éléments de la matrice sont soit sélectionnés ou non \\
+(true/false), la base de la solution repose sur le fait de ne stocker que les
+\\coordonnées des pixels sélectionnés. Afin d'économiser encore plus au lieu de stocker 2 entiers (soit avec un tableau de longueur 2,
+un objet de type "Pair", etc.), on utilise la fonction de \textbf{Cantor} qui code deux entiers naturels en un seul et \textbf{unique}.
+L'interface "Mask" possède deux méthodes get/setPixel prenant en paramètre les coordonnées $(x,y)$ et la méthode prend en plus un booléen\\
+signalant si le pixel est sélectionné ou non.
+La classe "InfiniteMask" implémentant l'interface "Mask" repose sur le principe suivant:
+\vspace{0.2cm}
+
 \begin{itemize}
-\item[\textbf{setPixel(($x,y,$isselected)}] dslkmds
+\item[\textbf{setPixel(($x,y,$ isselected)}] de l'extérieur cette méthode change la valeur du pixel, mais dans le cas d'InfiniteMask
+cela utilise la fonction de Cantor ainsi $f(x,y)  \mapsto z$ (l'opération est en $ O(1)$. Si la valeur "isselected" est vraie cela stocke l'entier $z$, sinon
+$z$ est retiré. De plus, la structure de données stockant les entiers est une \textbf{Set} donc n'acceptant \underline{aucun doublon}.
+\vspace*{0.2cm}
+\item[\textbf{getPixel($x,y$)}] cela teste si l'entier $z$ obtenu est stocké dans le masque.
 \end{itemize}
+
+\newpage
+De l'extérieur, l'utilisateur a l'impression de manipuler une matrice de booléens tout à fait classique.
+Au niveau de l'économie de mémoire, au lieu de stocker tout une matrice on ne stocke quelques entiers
+(excepté pour des tests de montés en charge), la majeure partie du temps il y aura une grande majorité de pixels non sélectionnés.
+Dans le pire des cas, tous les pixels sélectionnés pour une matrice $m\times n$, seront stockés $m\times n$ entiers.
