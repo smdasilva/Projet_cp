@@ -17,7 +17,7 @@ import com.pixelmed.dicom.Attribute;
 import com.pixelmed.dicom.AttributeList;
 import com.pixelmed.dicom.DicomException;
 
-public class DicomInfosProvider implements InformationProvider {
+class DicomInfosProvider implements InformationProvider {
 
     private static final List<DicomTags> patientTags =
             Arrays.asList(DicomTags.PatientName, DicomTags.PatientAge, DicomTags.PatientID,

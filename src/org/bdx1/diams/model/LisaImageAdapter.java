@@ -22,4 +22,8 @@ public class LisaImageAdapter implements Image {
         return lisaImage.getData();
     }
 
+    public int getMax() {
+        return lisaImage.getDataMax();
+    }
+
 }

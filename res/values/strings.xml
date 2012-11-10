@@ -7,5 +7,6 @@
     <string name="no_files">No files in the folder.</string>
     <string name="view_infos">View Infos</string>
     <string name="title_activity_image">ImageActivity</string>
+    <string name="show_infos">Show Infos</string>
 
 </resources>
