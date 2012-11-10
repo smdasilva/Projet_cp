@@ -16,7 +16,19 @@ public class DefaultModelFactory implements ModelFactory {
     }
     
     public Examen makeExamen(File studyFile) {
-        return new Examen(studyFile, new ListSliceManager());
+        if (studyFile.isDirectory()) {
+            Examen exam = null;
+            for (File fils : studyFile.listFiles()) {
+                if (fils.isFile() && fils.getName().endsWith(".dcm")) {
+                    if (exam == null)
+                        exam = new Examen(fils, makeSliceManager());
+                    exam.addSlice(fils);
+                }
+            }
+            return exam;
+        } else { 
+            return new Examen(studyFile, makeSliceManager());
+        }
     }
 
     public static Image makeImage(File dicom) {
@@ -24,5 +36,9 @@ public class DefaultModelFactory implements ModelFactory {
         if (!prov.read(dicom))
             return null;
         return prov.getImage();
+    }
+    
+    protected SliceManager makeSliceManager() {
+        return new ListSliceManager();
     }
 }
