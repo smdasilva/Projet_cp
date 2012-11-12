@@ -196,7 +196,7 @@ public class MainActivity extends ListActivity {
 		if (clickedFile != null) {
 			//TODO: pass the exam to the drawing view.
 			System.out.println("MAKING A NEW EXAM");
-			Examen ex = Factory.MODEL_FACTORY.makeExamen(clickedFile);
+			Examen ex = Factory.MODEL_FACTORY.makeExamen(clickedFile.getParentFile());
 			mApplication.setCurrentExamen(ex);
 			Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
 	        startActivity(intent);
