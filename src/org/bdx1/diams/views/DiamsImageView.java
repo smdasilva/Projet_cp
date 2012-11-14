@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 
 /**
@@ -16,16 +17,19 @@ import android.widget.ImageView;
 public class DiamsImageView extends ImageView {
 
     private Slice slice;
-    
+
     private int windowCenter=0;
     private int windowWidth=1024;
-    
-    private float scale;
+
+    private float scale = 1;
     private float tx;
     private float ty;
 
     private Bitmap bitmap;
-    
+
+    private float touchX;
+    private float touchY;
+
     public void setWindowCenter(int windowCenter) {
         this.windowCenter = windowCenter;
         updateBitmap();
@@ -54,7 +58,7 @@ public class DiamsImageView extends ImageView {
     private void init() {
         this.setScaleType(ScaleType.MATRIX);
     }
-    
+
     public void setSlice(Slice newSlice) {
         slice = newSlice;
         Image img = slice.getImage();
@@ -69,32 +73,54 @@ public class DiamsImageView extends ImageView {
         bitmap.setPixels(pixels, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight());
         this.setImageBitmap(bitmap);
     }
-    
+
     private void centerImage() {
         //float scaleX = this.getWidth() / (float) this.slice.getImage().getWidth();
         //float scaleY = this.getHeight() / (float) this.slice.getImage().getWidth();
         this.scale = 1;
         this.tx = Math.max(0, 0.5f * this.scale * (this.getWidth() - this.slice.getImage().getWidth()));
         this.ty = Math.max(0, 0.5f * this.scale * (this.getHeight() - this.slice.getImage().getHeight()));
-        
-        updateTranformations();
+
+        updateTransformations();
     }
-    
-    private void updateTranformations() {
+
+    private void updateTransformations() {
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
         matrix.postTranslate(tx, ty);
         this.setImageMatrix(matrix);
+        this.invalidate();
     }
-    
+
     private void updateScale(float newScale) {
         this.scale = newScale;
-        updateTranformations();
+        updateTransformations();
     }
-    
+
     private void updateTranslation(float tx, float ty) {
         this.tx = tx;
         this.ty = ty;
-        updateTranformations();
+        updateTransformations();
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN :
+            touchX = event.getX();
+            touchY = event.getY();
+            break;
+        case MotionEvent.ACTION_MOVE :
+            updateTranslation(tx+event.getX()-touchX, ty+event.getY()-touchY);
+            touchX = event.getX();
+            touchY = event.getY();
+            break;
+        default :
+            
+            break;
+        }
+        return true;
+    }
+
+
 }
