@@ -82,7 +82,7 @@
 
     <Button
         android:id="@+id/sliceInc"
-        style="?android:attr/buttonStyleSmall"
+        style="@android:style/TextAppearance.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -92,11 +92,20 @@
 
     <Button
         android:id="@+id/sliceDec"
-        style="?android:attr/buttonStyleSmall"
+        style="@android:style/TextAppearance.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/sliceText"
         android:onClick="decrementSlice"
         android:text="&lt;" />
+
+    <SeekBar
+        android:id="@+id/zoomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/sliceInc"
+        android:max="400" />
+
 </RelativeLayout>

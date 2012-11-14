@@ -92,7 +92,7 @@ public class DiamsImageView extends ImageView {
         this.invalidate();
     }
 
-    private void updateScale(float newScale) {
+    public void updateScale(float newScale) {
         this.scale = newScale;
         updateTransformations();
     }
@@ -111,7 +111,7 @@ public class DiamsImageView extends ImageView {
             touchY = event.getY();
             break;
         case MotionEvent.ACTION_MOVE :
-            updateTranslation(tx+event.getX()-touchX, ty+event.getY()-touchY);
+            updateTranslation(tx+(event.getX()-touchX), ty+(event.getY()-touchY));
             touchX = event.getX();
             touchY = event.getY();
             break;

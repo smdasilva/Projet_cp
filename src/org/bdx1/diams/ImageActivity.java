@@ -22,6 +22,7 @@ public class ImageActivity extends Activity {
     private DiamsImageView imageView;
     private SeekBar centerSlider;
     private SeekBar widthSlider;
+    private SeekBar zoomSlider;
     private TextView centerText;
     private TextView widthText;
     private DiamsApplication app;
@@ -49,6 +50,8 @@ public class ImageActivity extends Activity {
         widthText = (TextView) findViewById(R.id.widthSliderText);
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
         widthSlider = (SeekBar) findViewById(R.id.widthSlider);
+        zoomSlider = (SeekBar) findViewById(R.id.zoomBar);
+        
         
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
@@ -78,6 +81,23 @@ public class ImageActivity extends Activity {
             }
         });
         
+        zoomSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                
+            }
+            
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                
+            }
+            
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                    boolean fromUser) {
+                imageView.updateScale(progress/100f);
+            }
+        });
+        
+        zoomSlider.setProgress(100);
         centerSlider.setProgress(windowCenter);
         widthSlider.setProgress(windowWidth);
         
