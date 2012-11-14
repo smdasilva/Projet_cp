@@ -8,13 +8,14 @@ import android.graphics.Bitmap;
 
 public class ImageTranscriber {
 
-    public static Bitmap transcribeSlice(Slice slice, int windowCenter, int windowWidth) {
+    
+    public static int[] transcribeSlice(Slice slice, int windowCenter, int windowWidth) {
         Image img = slice.getImage();
         int[] imgData = img.getData();
         int[] pixels = new int[imgData.length];
-        Map<String,String> infosMap = slice.getInfos();
-        float slope = Float.valueOf(infosMap.get("Slope"));
-        float intercept = Float.valueOf(infosMap.get("Intercept"));
+//        Map<String,String> infosMap = slice.getInfos();
+//        float slope = Float.valueOf(infosMap.get("Slope"));
+//        float intercept = Float.valueOf(infosMap.get("Intercept"));
         
         int min = windowCenter - (windowWidth/2);
         int max = windowCenter + (windowWidth/2);
@@ -28,8 +29,7 @@ public class ImageTranscriber {
             pixels[i] = pixelData | pixelData<<8 | (pixelData<<16) | pixelData<<24 | (0xFF<<24);
         }
         
-        Bitmap bitmap = Bitmap.createBitmap(pixels, img.getWidth(), img.getHeight(), Bitmap.Config.ARGB_8888);
-        return bitmap;
+        return pixels;
     }
     
     private static int applyHounsfield(int originalValue, int min, int max) {

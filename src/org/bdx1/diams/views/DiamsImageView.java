@@ -1,17 +1,13 @@
 package org.bdx1.diams.views;
 
 import org.bdx1.diams.image.ImageTranscriber;
+import org.bdx1.diams.model.Image;
 import org.bdx1.diams.model.Slice;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView;
 
 /**
@@ -28,6 +24,8 @@ public class DiamsImageView extends ImageView {
     private float tx;
     private float ty;
 
+    private Bitmap bitmap;
+    
     public void setWindowCenter(int windowCenter) {
         this.windowCenter = windowCenter;
         updateBitmap();
@@ -59,13 +57,17 @@ public class DiamsImageView extends ImageView {
     
     public void setSlice(Slice newSlice) {
         slice = newSlice;
+        Image img = slice.getImage();
+        bitmap = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Bitmap.Config.ARGB_8888);
         updateBitmap();
         //centerImage();
     }
 
     private void updateBitmap() {
-        Bitmap bmp = ImageTranscriber.transcribeSlice(slice, windowCenter, windowWidth);
-        this.setImageBitmap(bmp);
+        int[] pixels = ImageTranscriber.transcribeSlice(slice, windowCenter, windowWidth);
+        Image img = slice.getImage();
+        bitmap.setPixels(pixels, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight());
+        this.setImageBitmap(bitmap);
     }
     
     private void centerImage() {

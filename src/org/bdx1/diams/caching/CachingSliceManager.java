@@ -1,7 +1,7 @@
 package org.bdx1.diams.caching;
 
 import java.io.File;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bdx1.diams.model.Slice;
@@ -22,7 +22,7 @@ public class CachingSliceManager implements SliceManager {
     private final static int CACHE_REACH = 2;
     
     /** List of files to charge slices **/
-    private List<File> files = new LinkedList<File>();
+    private List<File> files = new ArrayList<File>();
     /** Caching object for delegation **/
     private SliceCacher cache = new SliceCacher(MAX_CACHE_SIZE);
     
