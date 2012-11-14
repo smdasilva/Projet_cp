@@ -29,7 +29,7 @@ public class Examen {
         infosProv.read(studyFile);
         patientInfos = infosProv.getPatientInfos();
         studyInfos = infosProv.getStudyInfos();
-        //addSlice(studyFile);
+        addSlice(studyFile);
     }
 
     /**

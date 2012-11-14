@@ -22,7 +22,8 @@ public class DefaultModelFactory implements ModelFactory {
                 if (fils.isFile() && fils.getName().endsWith(".dcm")) {
                     if (exam == null)
                         exam = new Examen(fils, makeSliceManager());
-                    exam.addSlice(fils);
+                    else
+                        exam.addSlice(fils);
                 }
             }
             return exam;
