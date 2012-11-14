@@ -13,7 +13,7 @@
     <SlidingDrawer
         android:id="@+id/slidingDrawer1"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:content="@+id/content"
