@@ -93,7 +93,10 @@ public class DiamsImageView extends ImageView {
     }
 
     public void updateScale(float newScale) {
+        float scaleRatio = scale/newScale;
         this.scale = newScale;
+        tx *= scaleRatio;
+        ty *= scaleRatio;
         updateTransformations();
     }
 
