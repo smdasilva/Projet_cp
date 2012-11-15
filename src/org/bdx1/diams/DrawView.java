@@ -32,6 +32,7 @@ public class DrawView extends View implements OnTouchListener {
     private List<Point2D> points = new LinkedList<Point2D>();
     private Drawing drawing = new Drawing(mask);
     private Bezier bezier = new Bezier();
+    private Point2D previous;
 
     public DrawView(Context context) {
         super(context);
@@ -62,12 +63,12 @@ public class DrawView extends View implements OnTouchListener {
         canvas.drawBitmap(Bitmap.createBitmap(maskData, 512, 512, Bitmap.Config.ARGB_8888),
                 0,0,mPaint);
 
-        Point2D previous = null;
-        for (Point2D p : points) {
-            if (previous != null)
-                canvas.drawLine(previous.x, previous.y, p.x, p.y, mPaint);
-            previous = p;        
-        }
+//        Point2D previous = null;
+//        for (Point2D p : points) {
+//            if (previous != null)
+//                canvas.drawLine(previous.x, previous.y, p.x, p.y, mPaint);
+//            previous = p;        
+//        }
 
 
     }
@@ -76,34 +77,44 @@ public class DrawView extends View implements OnTouchListener {
     private static final float TOUCH_TOLERANCE = 1;
 
     private void touch_start(float x, float y) {
-        Point2D p = new Point2D(x,y);
-        points.add(p);
+//        Point2D p = new Point2D(x,y);
+//        points.add(p);
         mX = x;
         mY = y;
     }
     private void touch_move(float x, float y) {
-        Point2D p = new Point2D(x,y);
-        points.add(p);
-
+//        Point2D p = new Point2D(x,y);
+//        points.add(p);
+        
+        float x1 = Math.min(x, mX);
+        float x2 = Math.max(x, mX);
+        float y1 = Math.min(y, mY);
+        float y2 = Math.max(y, mY);
+        
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
+        float c = (y-mY)/(x-mX);
+        float b = y-(c*x);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            for (float s = x1+1 ; s<x2 ; s+=1)
+                for (float z=(b-2) ; z<b+3 ; z++)
+                    mask.setPixel((int)s, (int)(c*s+z), true);
             mX = x;
             mY = y;
         }
     }
     private void touch_up() {
-        float[][] controls = new float[points.size()][2];
-        for (int i=0 ; i<points.size() ; i++) {
-            Point2D p = points.get(i);
-            controls[i][0] = p.x;
-            controls[i][1] = p.y;
-        }
-        float[][] b = bezier.computeBezierPoints(controls, points.size()*5);
-        for(float[] t : b) {
-            mask.setPixel((int)t[0], (int)t[1], true);
-        }
-        points.clear();
+//        float[][] controls = new float[points.size()][2];
+//        for (int i=0 ; i<points.size() ; i++) {
+//            Point2D p = points.get(i);
+//            controls[i][0] = p.x;
+//            controls[i][1] = p.y;
+//        }
+//        float[][] b = bezier.computeBezierPoints(controls, points.size()*5);
+//        for(float[] t : b) {
+//            mask.setPixel((int)t[0], (int)t[1], true);
+//        }
+//        points.clear();
     }
 
 
