@@ -22,9 +22,17 @@ public class CantorPair {
 
 
 	public static Pair<Integer,Integer> decode(int n) {
-		int t = (int)Math.floor((-1D + Math.sqrt(1D + 8 * n))/2D);
-		int x = t * (t + 3) / 2 - n;
-		int y = n - t * (t + 1) / 2;
-		return new Pair<Integer, Integer>(x,y);
+	        Pair<Integer, Integer> p = new Pair<Integer, Integer>(0, 0);
+		
+	        decode(n,p);
+	        return p;
+	}	
+	
+	public static void decode(int n, Pair<Integer, Integer> p) {
+	    int t = (int)Math.floor((-1D + Math.sqrt(1D + 8 * n))/2D);
+            int x = t * (t + 3) / 2 - n;
+            int y = n - t * (t + 1) / 2;
+            p.first = x;
+            p.second = y;
 	}
 }

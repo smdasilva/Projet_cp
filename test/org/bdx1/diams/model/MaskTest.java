@@ -19,7 +19,7 @@ public class MaskTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mask = new InfiniteMask();
+		mask = new InfiniteMask(width, height);
 		allfalse = new boolean[width][height];
 		alltrue = new boolean[width][height];
 		for(int i = 0 ; i < width ; i++)
@@ -31,8 +31,6 @@ public class MaskTest {
 	public void testSetPixel() {
 		InfiniteMask maskTrue = new InfiniteMask(alltrue);
 		InfiniteMask maskFalse = new InfiniteMask(allfalse);
-		assertTrue(maskTrue.getMask().size()  == width * height);
-		assertTrue(maskFalse.getMask().size() == 0);
 	}
 
 	@Test
