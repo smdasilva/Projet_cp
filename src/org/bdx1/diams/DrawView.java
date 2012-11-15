@@ -7,10 +7,12 @@ import java.util.List;
 import org.bdx1.diams.model.Drawing;
 import org.bdx1.diams.model.InfiniteMask;
 import org.bdx1.diams.model.Mask;
+import org.bdx1.diams.model.MatrixMask;
 import org.bdx1.diams.util.Pair;
 import org.bdx1.diams.util.Point2D;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -48,7 +50,7 @@ public class DrawView extends View implements OnTouchListener {
         mPaint.setStrokeWidth(15);
         //mCanvas = new Canvas();
 
-        mask = new InfiniteMask(512, 512);
+        mask = new MatrixMask(512, 512);
     }               
 
     @Override
@@ -57,7 +59,8 @@ public class DrawView extends View implements OnTouchListener {
        
 
         int[] maskData = mask.getData();
-        canvas.drawBitmap(maskData, 0, 512, 0, 0, 512, 512, false, mPaint);
+        canvas.drawBitmap(Bitmap.createBitmap(maskData, 512, 512, Bitmap.Config.ARGB_8888),
+                0,0,mPaint);
 
         Point2D previous = null;
         for (Point2D p : points) {
