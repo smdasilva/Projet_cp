@@ -1,21 +1,26 @@
 package org.bdx1.diams.image;
 
-import java.util.Map;
-
 import org.bdx1.diams.model.Image;
 import org.bdx1.diams.model.Slice;
+
 import android.graphics.Bitmap;
 
 public class ImageTranscriber {
 
+    private Slice slice;
+    private Bitmap bitmap;
+    private int[] pixels;
+
+    public ImageTranscriber(Slice slice) {
+        this.slice = slice;
+        Image img = slice.getImage();
+        bitmap = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Bitmap.Config.ARGB_8888);
+        pixels = new int[img.getWidth()*img.getHeight()];
+    }
     
-    public static int[] transcribeSlice(Slice slice, int windowCenter, int windowWidth) {
+    public Bitmap transcribeSlice(Slice slice, int windowCenter, int windowWidth) {
         Image img = slice.getImage();
         int[] imgData = img.getData();
-        int[] pixels = new int[imgData.length];
-//        Map<String,String> infosMap = slice.getInfos();
-//        float slope = Float.valueOf(infosMap.get("Slope"));
-//        float intercept = Float.valueOf(infosMap.get("Intercept"));
         
         int min = windowCenter - (windowWidth/2);
         int max = windowCenter + (windowWidth/2);
@@ -23,13 +28,14 @@ public class ImageTranscriber {
         max = max > img.getMax() ? img.getMax() : max;
         
         for (int i=0 ; i<imgData.length ; i++) {
-            //int pixelData = (int) (imgData[i] * slope + intercept);
             int pixelData = imgData[i];
             pixelData = applyHounsfield(pixelData, min, max);
             pixels[i] = pixelData | pixelData<<8 | (pixelData<<16) | pixelData<<24 | (0xFF<<24);
         }
         
-        return pixels;
+        bitmap.setPixels(pixels, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight());
+        
+        return bitmap;
     }
     
     private static int applyHounsfield(int originalValue, int min, int max) {

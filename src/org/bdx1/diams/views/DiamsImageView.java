@@ -30,6 +30,8 @@ public class DiamsImageView extends ImageView {
     private float touchX;
     private float touchY;
 
+    private ImageTranscriber transcriber;
+
     public void setWindowCenter(int windowCenter) {
         this.windowCenter = windowCenter;
         updateBitmap();
@@ -61,17 +63,13 @@ public class DiamsImageView extends ImageView {
 
     public void setSlice(Slice newSlice) {
         slice = newSlice;
-        Image img = slice.getImage();
-        bitmap = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Bitmap.Config.ARGB_8888);
+        transcriber = new ImageTranscriber(slice);
         updateBitmap();
         //centerImage();
     }
 
     private void updateBitmap() {
-        int[] pixels = ImageTranscriber.transcribeSlice(slice, windowCenter, windowWidth);
-        Image img = slice.getImage();
-        bitmap.setPixels(pixels, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight());
-        this.setImageBitmap(bitmap);
+        this.setImageBitmap(transcriber.transcribeSlice(slice, windowCenter, windowWidth));
     }
 
     private void centerImage() {
