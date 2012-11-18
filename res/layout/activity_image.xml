@@ -10,6 +10,13 @@
         android:layout_height="fill_parent"
         android:layout_marginTop="58dp" />
 
+    <org.bdx1.diams.views.DrawView
+        android:id="@+id/drawView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="58dp"
+        android:visibility="gone" />
+    
     <SlidingDrawer
         android:id="@+id/slidingDrawer1"
         android:layout_width="fill_parent"
@@ -107,5 +114,14 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/sliceInc"
         android:max="400" />
+
+    <ToggleButton
+        android:id="@+id/toggleMask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Mask" 
+        android:onClick="toggleMask"/>
 
 </RelativeLayout>
