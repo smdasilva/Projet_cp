@@ -2,13 +2,24 @@
 
 
 \section{Dicom}
+\subsection{Bibliothèques}
+Afin de pouvoir lire des fichier au format .dcm, nous avons du trouver une bibliothèque en java.
+Il y a deux parties importantes dans un fichier dicom : l'image et les informations relatives à l'examen.
+Nous nous sommes d'abord tournés vers dcm4che, mais nous nous sommes rapidement apercus que cette bibliothèque, en plus de ne pas être facile d'utilisation, n'était pas compatible avec android. Nous avons alors trouvé la bibliothèque pixelmed, beaucoup plus intuitive. La récupération des informations contenues dans un dicom à l'aide de cette bibliothèque était très facile, mais le récupération de l'image ne fonctionnait pas sous android. Nous avons alors décidé de conserver pixelmed pour les informations et d'utiliser DroidDicomViewer pour l'image.
 
+\subsection{Affichage de l'image}
+Afin de pouvoir changer le contraste de l'image en utilisant l'echelle de Hounsfield, nous avons implémenté un transcriber capable de transformer l'information de l'image suivant les paramètres de l'echelle en données affichable par la vue.
 - Système de visualisation (Hounsfield)
 
 \section{Moteur de réseau}
+% on a un moteur de réseau ???
 
-\section{Gestionnaire de mémoire}
+\section{Gestion de la mémoire}
 \subsection{Le système de cache}
+Afin d'éviter de surcharger la mémoire limitée de l'appareil, nous avons iplémenté un système de cache.
+Il se base sur l'algorithme LRU déjà implémenté au sein d'android. La classe LruCache stocke des lignes de cache chargées de lire de facon asynchrone les fichiers dicom pour générer les slices de l'examen. L'accès à la slice n'est alors permis que lorsque le fichier a été lu.
+Lorsque la taille maximum du cache est atteinte, LruCache se charge d'éliminer le plus ancien.
+La taille de ce cache est configurable au sein du code pour permettre de l'adapter au besoin.
 
 \subsection{Le masque}
 L'économie de la mémoire est un enjeu très important, encore plus présent dans ce cas
