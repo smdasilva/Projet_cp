@@ -8,5 +8,7 @@
     <string name="view_infos">View Infos</string>
     <string name="title_activity_image">ImageActivity</string>
     <string name="show_infos">Show Infos</string>
+    <string name="drag">mode drag</string>
+    <string name="draw">mode draw</string>
 
 </resources>

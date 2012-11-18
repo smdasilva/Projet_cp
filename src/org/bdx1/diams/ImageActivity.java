@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -28,6 +30,9 @@ public class ImageActivity extends Activity {
     private StringBuilder builder = new StringBuilder();
     private Button sliceInc, sliceDec;
     private TextView sliceText;
+	private ImageButton switchButton;
+    private enum states {DRAG, DRAW}
+    private states currentState = states.DRAG;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class ImageActivity extends Activity {
         widthText = (TextView) findViewById(R.id.widthSliderText);
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
         widthSlider = (SeekBar) findViewById(R.id.widthSlider);
+        switchButton = (ImageButton) findViewById(R.id.modeButton);
         
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
@@ -77,6 +83,14 @@ public class ImageActivity extends Activity {
                 changeWindowWidth(progress);
             }
         });
+        
+        switchButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				switchMode(v);
+				changeButtonImage();
+			}
+		});
         
         centerSlider.setProgress(windowCenter);
         widthSlider.setProgress(windowWidth);
@@ -141,6 +155,22 @@ public class ImageActivity extends Activity {
         sliceDec.setEnabled(true);
         sliceChanged();
     }
+    
+   public void switchMode(View v) {
+	   if (currentState == states.DRAG) {
+		   currentState = states.DRAW;
+	   } else {
+		   currentState = states.DRAG;
+	   }
+   }
+   
+   private void changeButtonImage() {
+	   if (currentState == states.DRAG){
+		   switchButton.setImageResource(R.drawable.ic_menu_move);
+	   } else {
+		   switchButton.setImageResource(R.drawable.ic_menu_draw);
+	   }
+   }
     
     public void sliceChanged() {
         builder.delete(0, builder.length());

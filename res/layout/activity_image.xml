@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:contentDescription="mode drag"
     tools:context="ImageActivity" >
 
     <org.bdx1.diams.views.DiamsImageView
@@ -99,4 +100,17 @@
         android:layout_toLeftOf="@+id/sliceText"
         android:onClick="decrementSlice"
         android:text="&lt;" />
+
+    <ImageButton
+        android:id="@+id/modeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sliceDec"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/sliceDec"
+        android:contentDescription="@string/drag"
+        android:onClick="switchMode"
+        android:src="@drawable/ic_menu_move" />
+
 </RelativeLayout>
