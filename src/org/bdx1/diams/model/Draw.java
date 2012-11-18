@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.widget.ImageView;
 
-public class Draw extends ImageView {
+public class Draw  {
 	
 	private float mX, mY; // Last Coord
     private float TOUCH_TOLERANCE = 1;
@@ -17,8 +17,7 @@ public class Draw extends ImageView {
     private Paint mPaint;
     private Canvas mCanvas;
     
-    public Draw(Context context) {
-    	super(context);
+    public Draw() {
     	this.mPath = new Path(); 
     	this.bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ALPHA_8);
     	mCanvas = new Canvas();
