@@ -21,6 +21,7 @@ public class DrawView extends ImageView implements OnTouchListener {
     private Path    mPath;
     private Paint   mPaint;   
     Bitmap bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ALPHA_8);
+    Mask mask = new InfiniteMask();
 
 
     public DrawView(Context context) {
@@ -37,6 +38,11 @@ public class DrawView extends ImageView implements OnTouchListener {
         super(context, attrs);
         init();
     }
+    
+    public void save() {
+    	
+    }
+    
     private void init() {
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -90,6 +96,7 @@ public class DrawView extends ImageView implements OnTouchListener {
         mPath.lineTo(mX, mY);    
     }
 
+    
 
 
     public boolean onTouch(View arg0, MotionEvent event) {
