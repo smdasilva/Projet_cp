@@ -2,6 +2,9 @@ package org.bdx1.diams.views;
 
 
 
+import org.bdx1.diams.model.InfiniteMask;
+import org.bdx1.diams.model.Mask;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 
@@ -21,7 +24,7 @@ public class DrawView extends ImageView implements OnTouchListener {
     private Path    mPath;
     private Paint   mPaint;   
     Bitmap bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ALPHA_8);
-    Mask mask = new InfiniteMask();
+    Mask mask = new InfiniteMask(512,512);
 
 
     public DrawView(Context context) {
@@ -40,8 +43,15 @@ public class DrawView extends ImageView implements OnTouchListener {
     }
     
     public void save() {
-    	
+    	for(int i = 0; i<bitmap.getWidth(); i++){
+            for(int j = 0; j<bitmap.getHeight(); j++){
+            	if(bitmap.getPixel(i, j) != 0) {    
+            		mask.setPixel(i, j, true);
+            	}
+            }
+    	}
     }
+    	
     
     private void init() {
         setFocusable(true);
