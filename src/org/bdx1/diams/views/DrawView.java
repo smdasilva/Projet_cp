@@ -60,14 +60,14 @@ public class DrawView extends ImageView implements OnTouchListener {
         this.setOnTouchListener(this);
 
         mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        //mPaint.setAntiAlias(true);
+        mPaint.setAntiAlias(true);
         mPaint.setFilterBitmap(true);
         mPaint.setDither(true);
         mPaint.setColor(Color.RED);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(1);
+        mPaint.setStrokeWidth(2);
         mCanvas = new Canvas();
         mCanvas.setBitmap(bitmap);
         mPath = new Path();
@@ -89,11 +89,11 @@ public class DrawView extends ImageView implements OnTouchListener {
     private void touch_start(float x, float y) {
         mPath.reset();
         mPath.moveTo(x, y);
+        mCanvas.drawPoint(x, y, mPaint);
         mX = x;
         mY = y;
     }
     private void touch_move(float x, float y) {
-        System.out.println(x+":"+y);
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
