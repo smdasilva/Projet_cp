@@ -5,6 +5,7 @@ import java.util.Map;
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Slice;
 import org.bdx1.diams.views.DiamsImageView;
+import org.bdx1.diams.views.DrawView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,12 +19,15 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class ImageActivity extends Activity {
 
     private DiamsImageView imageView;
+    private DrawView drawView;
     private SeekBar centerSlider;
     private SeekBar widthSlider;
+    private SeekBar zoomSlider;
     private TextView centerText;
     private TextView widthText;
     private DiamsApplication app;
@@ -49,12 +53,16 @@ public class ImageActivity extends Activity {
         
         imageView = (DiamsImageView) findViewById(R.id.imageView);
         imageView.setSlice(currentSlice);
+        
+        drawView = (DrawView) findViewById(R.id.drawView);
 
         centerText = (TextView) findViewById(R.id.centerSliderText);
         widthText = (TextView) findViewById(R.id.widthSliderText);
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
         widthSlider = (SeekBar) findViewById(R.id.widthSlider);
         switchButton = (ImageButton) findViewById(R.id.modeButton);
+        zoomSlider = (SeekBar) findViewById(R.id.zoomBar);
+        
         
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
@@ -92,6 +100,23 @@ public class ImageActivity extends Activity {
 			}
 		});
         
+        zoomSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                
+            }
+            
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                
+            }
+            
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                    boolean fromUser) {
+                imageView.updateScale(progress/100f);
+            }
+        });
+        
+        zoomSlider.setProgress(100);
         centerSlider.setProgress(windowCenter);
         widthSlider.setProgress(windowWidth);
         
@@ -180,5 +205,13 @@ public class ImageActivity extends Activity {
         builder.append(app.getCurrentExamen().getNumberOfSlices());
         sliceText.setText(builder);
         imageView.setSlice(app.getCurrentExamen().getSlice(app.getCurrentSliceIndex()));
+    }
+    
+    public void toggleMask(View v) {
+        ToggleButton b = (ToggleButton) v;
+        if (b.isChecked())
+            drawView.setVisibility(View.VISIBLE);
+        else
+            drawView.setVisibility(View.GONE);
     }
 }
