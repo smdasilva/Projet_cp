@@ -4,6 +4,7 @@ package org.bdx1.diams.views;
 
 import org.bdx1.diams.model.InfiniteMask;
 import org.bdx1.diams.model.Mask;
+import org.bdx1.diams.util.ImageControls;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -71,6 +73,9 @@ public class DrawView extends ImageView implements OnTouchListener {
         mCanvas = new Canvas();
         mCanvas.setBitmap(bitmap);
         mPath = new Path();
+        
+        this.setScaleType(ImageView.ScaleType.MATRIX);
+        this.setColorFilter(mPaint.getColor(), PorterDuff.Mode.SRC_ATOP);
     }               
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -79,8 +84,12 @@ public class DrawView extends ImageView implements OnTouchListener {
 
     @Override
     protected void onDraw(Canvas calque) {
+        this.setImageMatrix(ImageControls.getInstance().getTransformationMatrix());
+        //mCanvas.setMatrix(ImageControls.getInstance().getTransformationMatrix());
         mCanvas.drawPath(mPath, mPaint);
-        calque.drawBitmap(bitmap, 0, 0, mPaint);
+        //calque.drawBitmap(bitmap, 0, 0, mPaint);
+        this.setImageBitmap(bitmap);
+        super.onDraw(calque);   
     }
 
     private float mX, mY;
@@ -110,8 +119,9 @@ public class DrawView extends ImageView implements OnTouchListener {
 
 
     public boolean onTouch(View arg0, MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+        ImageControls ctrls = ImageControls.getInstance();
+        float x = event.getX()/ctrls.scale - ctrls.tx;
+        float y = event.getY()/ctrls.scale - ctrls.ty;
 
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
