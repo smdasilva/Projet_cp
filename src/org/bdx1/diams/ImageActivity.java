@@ -192,8 +192,10 @@ public class ImageActivity extends Activity {
    private void changeButtonImage() {
 	   if (currentState == states.DRAG){
 		   switchButton.setImageResource(R.drawable.ic_menu_move);
+		   drawView.setVisibility(View.GONE);
 	   } else {
 		   switchButton.setImageResource(R.drawable.ic_menu_draw);
+		   drawView.setVisibility(View.VISIBLE);
 	   }
    }
     
@@ -207,11 +209,4 @@ public class ImageActivity extends Activity {
         imageView.setSlice(app.getCurrentExamen().getSlice(app.getCurrentSliceIndex()));
     }
     
-    public void toggleMask(View v) {
-        ToggleButton b = (ToggleButton) v;
-        if (b.isChecked())
-            drawView.setVisibility(View.VISIBLE);
-        else
-            drawView.setVisibility(View.GONE);
-    }
 }
