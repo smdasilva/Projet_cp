@@ -50,25 +50,33 @@ containing a value of this type.
     public static final class drawable {
         public static final int ic_action_search=0x7f020000;
         public static final int ic_launcher=0x7f020001;
-        public static final int mabitmap=0x7f020002;
+        public static final int ic_menu_draw=0x7f020002;
+        public static final int ic_menu_drawthickness=0x7f020003;
+        public static final int ic_menu_drawthickness2=0x7f020004;
+        public static final int ic_menu_move=0x7f020005;
+        public static final int ic_menu_pen=0x7f020006;
+        public static final int ic_menu_scrub=0x7f020007;
     }
     public static final class id {
         public static final int centerSlider=0x7f080006;
         public static final int centerSliderText=0x7f080005;
         public static final int content=0x7f080003;
+        public static final int drawButtonsContainer=0x7f08000e;
+        public static final int drawEraseButton=0x7f08000f;
+        public static final int drawThicknessButton=0x7f080010;
         public static final int drawView=0x7f080001;
-        public static final int fileName=0x7f08000f;
-        public static final int file_chooser_mainLayout=0x7f080010;
+        public static final int fileName=0x7f080012;
+        public static final int file_chooser_mainLayout=0x7f080013;
         public static final int handle=0x7f080004;
         public static final int imageView=0x7f080000;
-        public static final int infos=0x7f08000e;
-        public static final int menu_settings=0x7f080012;
-        public static final int show_infos=0x7f080011;
+        public static final int infos=0x7f080011;
+        public static final int menu_settings=0x7f080015;
+        public static final int modeButton=0x7f08000d;
+        public static final int show_infos=0x7f080014;
         public static final int sliceDec=0x7f08000b;
         public static final int sliceInc=0x7f08000a;
         public static final int sliceText=0x7f080009;
         public static final int slidingDrawer1=0x7f080002;
-        public static final int toggleMask=0x7f08000d;
         public static final int widthSlider=0x7f080008;
         public static final int widthSliderText=0x7f080007;
         public static final int zoomBar=0x7f08000c;
@@ -87,6 +95,8 @@ containing a value of this type.
     }
     public static final class string {
         public static final int app_name=0x7f050000;
+        public static final int drag=0x7f050008;
+        public static final int draw=0x7f050009;
         public static final int hello_world=0x7f050001;
         public static final int menu_settings=0x7f050002;
         public static final int no_files=0x7f050004;
