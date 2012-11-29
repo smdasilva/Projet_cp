@@ -110,16 +110,16 @@ public class ImageActivity extends Activity {
         drawThicknessButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				//TODO: cycle through thickness
 				switchThickness(v);
+				changeThicknessButtonImage();
 			}
 		});
         
         drawEraseButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				//TODO: switch between erase mode and trace mode
 				switchDrawErase(v);
+				changeDrawEraseButtonImage();
 			}
 		});
         
@@ -213,12 +213,19 @@ public class ImageActivity extends Activity {
    }
    
    public void switchThickness(View v) {
-		// TODO Auto-generated method stub
-		
+	   if (lineThickness == thickness.SMALL) {
+		   lineThickness = thickness.BIG;
+	   } else {
+		   lineThickness = thickness.SMALL;
+	   }
    }
    
    public void switchDrawErase(View v) {
-		// TODO Auto-generated method stub	
+	   if (drawingMode == scrub.ERASE) {
+		   drawingMode = scrub.TRACE;
+	   } else {
+		   drawingMode = scrub.ERASE;
+	   }
   }
    
    private void changeModeButtonImage() {
@@ -234,6 +241,22 @@ public class ImageActivity extends Activity {
 		   drawEraseButton.setVisibility(View.VISIBLE);
 		   drawView.setVisibility(View.VISIBLE);
 		   drawView.restoreMask(app.getCurrentSliceIndex());
+	   }
+   }
+   
+   private void changeThicknessButtonImage() {
+	   if (lineThickness == thickness.SMALL){
+		   drawThicknessButton.setImageResource(R.drawable.ic_menu_drawthickness);
+	   } else {
+		   drawThicknessButton.setImageResource(R.drawable.ic_menu_drawthickness2);
+	   }
+   }
+   
+   private void changeDrawEraseButtonImage() {
+	   if (drawingMode == scrub.ERASE){
+		   drawEraseButton.setImageResource(R.drawable.ic_menu_scrub);
+	   } else {
+		   drawEraseButton.setImageResource(R.drawable.ic_menu_pen);
 	   }
    }
     
