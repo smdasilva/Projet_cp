@@ -78,6 +78,9 @@ public class ImageActivity extends Activity {
         zoomSlider = (SeekBar) findViewById(R.id.zoomBar);
         presetsSpinner = (Spinner) findViewById(R.id.hounfieldPresets);
         
+        drawEraseButton.setVisibility(View.GONE);
+		drawThicknessButton.setVisibility(View.GONE);
+        
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
             public void onStopTrackingTouch(SeekBar seekBar) {                

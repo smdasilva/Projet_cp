@@ -70,7 +70,7 @@ public class DrawView extends ImageView implements OnTouchListener {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(2);
+        mPaint.setStrokeWidth(4);
         mCanvas = new Canvas();
         mCanvas.setBitmap(bitmap);
         mPath = new Path();
