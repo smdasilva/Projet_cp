@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -148,6 +149,18 @@ public class DrawView extends ImageView implements OnTouchListener {
 	public void saveMask(int currentSliceIndex) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setTraceThickness(int lineThickness) {
+		mPaint.setStrokeWidth(lineThickness);
+	}
+
+	public void setEraseMode(boolean erase) {
+		if(erase) {
+			mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		} else {
+			mPaint.setXfermode(null);
+		}
 	}
 
 }

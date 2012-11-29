@@ -112,6 +112,8 @@ public class ImageActivity extends Activity {
 			public void onClick(View v) {
 				switchThickness(v);
 				changeThicknessButtonImage();
+				// Bad hack :'(
+				drawView.setTraceThickness((lineThickness.ordinal()+2)*2);
 			}
 		});
         
@@ -223,8 +225,10 @@ public class ImageActivity extends Activity {
    public void switchDrawErase(View v) {
 	   if (drawingMode == scrub.ERASE) {
 		   drawingMode = scrub.TRACE;
+		   drawView.setEraseMode(false);
 	   } else {
 		   drawingMode = scrub.ERASE;
+		   drawView.setEraseMode(true);
 	   }
   }
    
