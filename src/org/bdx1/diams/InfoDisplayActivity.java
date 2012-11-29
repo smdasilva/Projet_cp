@@ -1,13 +1,10 @@
 package org.bdx1.diams;
 
-import java.io.File;
-
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.views.InfosView;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 
 public class InfoDisplayActivity extends Activity {

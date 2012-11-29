@@ -35,8 +35,6 @@ package org.bdx1.diams;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Activity;
@@ -46,23 +44,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import org.bdx1.commons.ExternalStorage;
 import org.bdx1.dicom.data.DICOMMetaInformation;
 import org.bdx1.dicom.file.DICOMReader;
 import org.bdx1.diams.model.Examen;
-import org.bdx1.diams.parsing.InformationProvider;
-import org.bdx1.diams.parsing.InformationProviderManager;
 
 /**
  * File chooser.
