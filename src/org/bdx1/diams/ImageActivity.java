@@ -35,8 +35,14 @@ public class ImageActivity extends Activity {
     private Button sliceInc, sliceDec;
     private TextView sliceText;
 	private ImageButton switchButton;
+	private ImageButton drawThicknessButton;
+	private ImageButton drawEraseButton;
     private enum states {DRAG, DRAW}
+    private enum thickness {SMALL, BIG}
+    private enum scrub {TRACE, ERASE}
     private states currentState = states.DRAG;
+    private thickness lineThickness = thickness.SMALL;
+    private scrub drawingMode = scrub.TRACE;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,8 +67,9 @@ public class ImageActivity extends Activity {
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
         widthSlider = (SeekBar) findViewById(R.id.widthSlider);
         switchButton = (ImageButton) findViewById(R.id.modeButton);
+        drawThicknessButton = (ImageButton) findViewById(R.id.drawThicknessButton);
+        drawEraseButton = (ImageButton) findViewById(R.id.drawEraseButton);
         zoomSlider = (SeekBar) findViewById(R.id.zoomBar);
-        
         
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
@@ -95,8 +102,24 @@ public class ImageActivity extends Activity {
         switchButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				switchMode(v);
-				changeButtonImage();
+				switchDrawDragMode(v);
+				changeModeButtonImage();
+			}
+		});
+        
+        drawThicknessButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				//TODO: cycle through thickness
+				switchThickness(v);
+			}
+		});
+        
+        drawEraseButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				//TODO: switch between erase mode and trace mode
+				switchDrawErase(v);
 			}
 		});
         
@@ -126,7 +149,7 @@ public class ImageActivity extends Activity {
         sliceText.setText("Slice "+(app.getCurrentSliceIndex()+1)+"/"+app.getCurrentExamen().getNumberOfSlices());
     }
 
-    @Override
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_image, menu);
         return true;
@@ -181,7 +204,7 @@ public class ImageActivity extends Activity {
         sliceChanged();
     }
     
-   public void switchMode(View v) {
+   public void switchDrawDragMode(View v) {
 	   if (currentState == states.DRAG) {
 		   currentState = states.DRAW;
 	   } else {
@@ -189,13 +212,28 @@ public class ImageActivity extends Activity {
 	   }
    }
    
-   private void changeButtonImage() {
+   public void switchThickness(View v) {
+		// TODO Auto-generated method stub
+		
+   }
+   
+   public void switchDrawErase(View v) {
+		// TODO Auto-generated method stub	
+  }
+   
+   private void changeModeButtonImage() {
 	   if (currentState == states.DRAG){
 		   switchButton.setImageResource(R.drawable.ic_menu_move);
+		   drawThicknessButton.setVisibility(View.GONE);
+		   drawEraseButton.setVisibility(View.GONE);
 		   drawView.setVisibility(View.GONE);
+		   drawView.saveMask(app.getCurrentSliceIndex());
 	   } else {
 		   switchButton.setImageResource(R.drawable.ic_menu_draw);
+		   drawThicknessButton.setVisibility(View.VISIBLE);
+		   drawEraseButton.setVisibility(View.VISIBLE);
 		   drawView.setVisibility(View.VISIBLE);
+		   drawView.restoreMask(app.getCurrentSliceIndex());
 	   }
    }
     

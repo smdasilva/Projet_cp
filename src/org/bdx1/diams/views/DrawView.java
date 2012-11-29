@@ -140,4 +140,14 @@ public class DrawView extends ImageView implements OnTouchListener {
         return true;
     }
 
+	public void restoreMask(int currentSliceIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void saveMask(int currentSliceIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
