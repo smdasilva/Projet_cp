@@ -77,6 +77,14 @@
                 android:layout_below="@id/centerSlider"
                 android:layout_toRightOf="@id/widthSliderText"
                 android:max="512" />
+
+            <Spinner
+                android:id="@+id/hounfieldPresets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/widthSlider"
+                android:layout_centerHorizontal="true" />
+
         </RelativeLayout>
     </SlidingDrawer>
 
@@ -126,14 +134,19 @@
         android:contentDescription="@string/drag"
         android:onClick="switchMode"
         android:src="@drawable/ic_menu_move" />
-
+
+
+
     <LinearLayout
         android:id="@+id/drawButtonsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/sliceDec"
         android:layout_toRightOf="@id/sliceInc" >
-
+
+
+
+
         <ImageButton
             android:id="@+id/drawEraseButton"
             android:layout_width="wrap_content"
@@ -144,7 +157,11 @@
             android:layout_weight="1"
             android:onClick="switchDrawErase"
             android:src="@drawable/ic_menu_pen" />
-
+
+
+
+
+
         <ImageButton
             android:id="@+id/drawThicknessButton"
             android:layout_width="wrap_content"

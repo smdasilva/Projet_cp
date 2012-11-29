@@ -2,6 +2,7 @@ package org.bdx1.diams;
 
 import java.util.Map;
 
+import org.bdx1.diams.image.HounsfieldPresets;
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Slice;
 import org.bdx1.diams.views.DiamsImageView;
@@ -14,10 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -30,6 +35,7 @@ public class ImageActivity extends Activity {
     private SeekBar zoomSlider;
     private TextView centerText;
     private TextView widthText;
+    private Spinner presetsSpinner;
     private DiamsApplication app;
     private StringBuilder builder = new StringBuilder();
     private Button sliceInc, sliceDec;
@@ -70,6 +76,7 @@ public class ImageActivity extends Activity {
         drawThicknessButton = (ImageButton) findViewById(R.id.drawThicknessButton);
         drawEraseButton = (ImageButton) findViewById(R.id.drawEraseButton);
         zoomSlider = (SeekBar) findViewById(R.id.zoomBar);
+        presetsSpinner = (Spinner) findViewById(R.id.hounfieldPresets);
         
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
@@ -144,6 +151,18 @@ public class ImageActivity extends Activity {
         zoomSlider.setProgress(100);
         centerSlider.setProgress(windowCenter);
         widthSlider.setProgress(windowWidth);
+        presetsSpinner.setAdapter(new ArrayAdapter<HounsfieldPresets>(this, android.R.layout.simple_spinner_item, HounsfieldPresets.values()));
+        presetsSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view,
+                    int pos, long id) {
+                HounsfieldPresets selected = (HounsfieldPresets) parent.getItemAtPosition(pos);
+                applyHounsfieldPreset(selected);
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {                
+            }
+        });
         
         sliceInc = (Button) findViewById(R.id.sliceInc);
         sliceDec = (Button) findViewById(R.id.sliceDec);
@@ -151,7 +170,7 @@ public class ImageActivity extends Activity {
         sliceText.setText("Slice "+(app.getCurrentSliceIndex()+1)+"/"+app.getCurrentExamen().getNumberOfSlices());
     }
 
-	@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_image, menu);
         return true;
@@ -272,6 +291,11 @@ public class ImageActivity extends Activity {
         builder.append(app.getCurrentExamen().getNumberOfSlices());
         sliceText.setText(builder);
         imageView.setSlice(app.getCurrentExamen().getSlice(app.getCurrentSliceIndex()));
+    }
+    
+    public void applyHounsfieldPreset(HounsfieldPresets preset) {
+        changeWindowCenter(preset.getCenter());
+        changeWindowWidth(preset.getWidth());
     }
     
 }
