@@ -16,7 +16,7 @@
         android:layout_height="fill_parent"
         android:layout_marginTop="58dp"
         android:visibility="gone" />
-    
+
     <SlidingDrawer
         android:id="@+id/slidingDrawer1"
         android:layout_width="fill_parent"
@@ -123,9 +123,8 @@
         android:layout_below="@+id/sliceInc"
         android:max="400" />
 
-  <ImageButton
+    <ImageButton
         android:id="@+id/modeButton"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/sliceDec"
@@ -133,8 +132,46 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/sliceDec"
         android:contentDescription="@string/drag"
-
         android:onClick="switchMode"
         android:src="@drawable/ic_menu_move" />
+
+
+
+    <LinearLayout
+        android:id="@+id/drawButtonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sliceDec"
+        android:layout_toRightOf="@id/sliceInc" >
+
+
+
+
+        <ImageButton
+            android:id="@+id/drawEraseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/zoomBar"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/sliceInc"
+            android:layout_weight="1"
+            android:onClick="switchDrawErase"
+            android:src="@drawable/ic_menu_pen" />
+
+
+
+
+
+        <ImageButton
+            android:id="@+id/drawThicknessButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:onClick="switchThickness"
+            android:src="@drawable/ic_menu_drawthickness" />
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,7 +70,7 @@ public class DrawView extends ImageView implements OnTouchListener {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(2);
+        mPaint.setStrokeWidth(4);
         mCanvas = new Canvas();
         mCanvas.setBitmap(bitmap);
         mPath = new Path();
@@ -139,5 +140,27 @@ public class DrawView extends ImageView implements OnTouchListener {
         }
         return true;
     }
+
+	public void restoreMask(int currentSliceIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void saveMask(int currentSliceIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTraceThickness(int lineThickness) {
+		mPaint.setStrokeWidth(lineThickness);
+	}
+
+	public void setEraseMode(boolean erase) {
+		if(erase) {
+			mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		} else {
+			mPaint.setXfermode(null);
+		}
+	}
 
 }

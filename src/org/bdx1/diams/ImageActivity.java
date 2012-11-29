@@ -41,8 +41,14 @@ public class ImageActivity extends Activity {
     private Button sliceInc, sliceDec;
     private TextView sliceText;
 	private ImageButton switchButton;
+	private ImageButton drawThicknessButton;
+	private ImageButton drawEraseButton;
     private enum states {DRAG, DRAW}
+    private enum thickness {SMALL, BIG}
+    private enum scrub {TRACE, ERASE}
     private states currentState = states.DRAG;
+    private thickness lineThickness = thickness.SMALL;
+    private scrub drawingMode = scrub.TRACE;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +73,13 @@ public class ImageActivity extends Activity {
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
         widthSlider = (SeekBar) findViewById(R.id.widthSlider);
         switchButton = (ImageButton) findViewById(R.id.modeButton);
+        drawThicknessButton = (ImageButton) findViewById(R.id.drawThicknessButton);
+        drawEraseButton = (ImageButton) findViewById(R.id.drawEraseButton);
         zoomSlider = (SeekBar) findViewById(R.id.zoomBar);
         presetsSpinner = (Spinner) findViewById(R.id.hounfieldPresets);
+        
+        drawEraseButton.setVisibility(View.GONE);
+		drawThicknessButton.setVisibility(View.GONE);
         
         centerSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             
@@ -101,8 +112,26 @@ public class ImageActivity extends Activity {
         switchButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				switchMode(v);
-				changeButtonImage();
+				switchDrawDragMode(v);
+				changeModeButtonImage();
+			}
+		});
+        
+        drawThicknessButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				switchThickness(v);
+				changeThicknessButtonImage();
+				// Bad hack :'(
+				drawView.setTraceThickness((lineThickness.ordinal()+2)*2);
+			}
+		});
+        
+        drawEraseButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				switchDrawErase(v);
+				changeDrawEraseButtonImage();
 			}
 		});
         
@@ -199,7 +228,7 @@ public class ImageActivity extends Activity {
         sliceChanged();
     }
     
-   public void switchMode(View v) {
+   public void switchDrawDragMode(View v) {
 	   if (currentState == states.DRAG) {
 		   currentState = states.DRAW;
 	   } else {
@@ -207,13 +236,53 @@ public class ImageActivity extends Activity {
 	   }
    }
    
-   private void changeButtonImage() {
+   public void switchThickness(View v) {
+	   if (lineThickness == thickness.SMALL) {
+		   lineThickness = thickness.BIG;
+	   } else {
+		   lineThickness = thickness.SMALL;
+	   }
+   }
+   
+   public void switchDrawErase(View v) {
+	   if (drawingMode == scrub.ERASE) {
+		   drawingMode = scrub.TRACE;
+		   drawView.setEraseMode(false);
+	   } else {
+		   drawingMode = scrub.ERASE;
+		   drawView.setEraseMode(true);
+	   }
+  }
+   
+   private void changeModeButtonImage() {
 	   if (currentState == states.DRAG){
 		   switchButton.setImageResource(R.drawable.ic_menu_move);
+		   drawThicknessButton.setVisibility(View.GONE);
+		   drawEraseButton.setVisibility(View.GONE);
 		   drawView.setVisibility(View.GONE);
+		   drawView.saveMask(app.getCurrentSliceIndex());
 	   } else {
 		   switchButton.setImageResource(R.drawable.ic_menu_draw);
+		   drawThicknessButton.setVisibility(View.VISIBLE);
+		   drawEraseButton.setVisibility(View.VISIBLE);
 		   drawView.setVisibility(View.VISIBLE);
+		   drawView.restoreMask(app.getCurrentSliceIndex());
+	   }
+   }
+   
+   private void changeThicknessButtonImage() {
+	   if (lineThickness == thickness.SMALL){
+		   drawThicknessButton.setImageResource(R.drawable.ic_menu_drawthickness);
+	   } else {
+		   drawThicknessButton.setImageResource(R.drawable.ic_menu_drawthickness2);
+	   }
+   }
+   
+   private void changeDrawEraseButtonImage() {
+	   if (drawingMode == scrub.ERASE){
+		   drawEraseButton.setImageResource(R.drawable.ic_menu_scrub);
+	   } else {
+		   drawEraseButton.setImageResource(R.drawable.ic_menu_pen);
 	   }
    }
     
