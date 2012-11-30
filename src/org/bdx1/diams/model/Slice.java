@@ -20,5 +20,8 @@ public interface Slice {
      * @return The image of this Slice
      */
     public Image getImage();
+    
+    /**the Mask */
+    public Mask getMask();
 
 }

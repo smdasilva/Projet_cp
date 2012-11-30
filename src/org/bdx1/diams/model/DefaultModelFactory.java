@@ -32,7 +32,7 @@ public class DefaultModelFactory implements ModelFactory {
         }
     }
 
-    public static Image makeImage(File dicom) {
+    public Image makeImage(File dicom) {
         ImageProvider prov = ImageProviderManager.getDicomProvider();
         if (!prov.read(dicom))
             return null;
@@ -41,5 +41,9 @@ public class DefaultModelFactory implements ModelFactory {
     
     protected SliceManager makeSliceManager() {
         return new ListSliceManager();
+    }
+    
+    public Mask makeMask(Image img) {
+        return new InfiniteMask(img.getWidth(), img.getHeight());
     }
 }
