@@ -87,7 +87,7 @@ public class DrawView extends ImageView implements OnTouchListener {
     protected void onDraw(Canvas calque) {
         this.setImageMatrix(ImageControls.getInstance().getTransformationMatrix());
         //mCanvas.setMatrix(ImageControls.getInstance().getTransformationMatrix());
-        mCanvas.drawPath(mPath, mPaint);
+        //mCanvas.drawPath(mPath, mPaint);
         //calque.drawBitmap(bitmap, 0, 0, mPaint);
         this.setImageBitmap(bitmap);
         super.onDraw(calque);   
@@ -102,6 +102,7 @@ public class DrawView extends ImageView implements OnTouchListener {
         mCanvas.drawPoint(x, y, mPaint);
         mX = x;
         mY = y;
+        mCanvas.drawPath(mPath, mPaint);
     }
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
@@ -111,9 +112,11 @@ public class DrawView extends ImageView implements OnTouchListener {
             mX = x;
             mY = y;
         }
+        mCanvas.drawPath(mPath, mPaint);
     }
     private void touch_up() {
-        mPath.lineTo(mX, mY);    
+        mPath.lineTo(mX, mY);  
+        mCanvas.drawPath(mPath, mPaint);
     }
 
     
