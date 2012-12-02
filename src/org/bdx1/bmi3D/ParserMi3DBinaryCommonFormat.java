@@ -77,7 +77,7 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 				String[] study_data = { "study_date", "study_time", "study_description"};
 				for (String s : patients_infos_titles)
 					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
-				/*besoin de high bit intercept, slope, window-center, slice thickness,
+				/*besoin de highbit, intercept, slope, window-center, slice thickness,
 					window-center width exploration
 				*/
 				fos.write(buf.toByteArray());
