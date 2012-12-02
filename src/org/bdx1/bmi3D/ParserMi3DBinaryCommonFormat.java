@@ -4,7 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
+import org.bdx1.commons.ExternalStorage;
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Mask;
 import org.bdx1.diams.model.Slice;
@@ -21,11 +23,13 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 	}
 
 	public boolean save(String filename, Examen examen) {
+		if( !(ExternalStorage.checkAvailable() && ExternalStorage.checkWritable()))
+				return false;
 		filename = filename.trim();
 		filename += extension;
 		
 		boolean dataflag = false;
-		boolean volumeflag = (examen.getMask() == null); //il me faut le masque
+		boolean volumeflag = (examen.getSlice(0).getMask() == null); //il me faut le masque
 		boolean skeletonflag = false; //le skeleton si vous l'avez
 		boolean informationflag = (!examen.getPatientInfos().isEmpty());
 		
@@ -58,7 +62,7 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 			buf.write((byte) resolutionZ);
 			
 			if (volumeflag) {
-				Mask mask = examen.getMask();
+				Mask mask = examen.getSlice(0).getMask();
 				byte[][] bmiMask = new byte[width][heigth];
 				for (int i = 0 ;i < width; i++)
 					for (int j = 0 ;j < heigth; j++)
@@ -87,6 +91,10 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
 				/*besoin de manufacturer
 				*/
+				
+				for (String s : study_data)
+					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
+				
 				String s = "Patient Name";
 				addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
 				addFieldIntoBuf("Slice Number", String.valueOf(examen.getNumberOfSlices()), buf);
@@ -103,10 +111,15 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 				}
 				
 				fos.write(buf.toByteArray());
+				buf.close();
+				fos.close();
 			}
 		} catch(FileNotFoundException f) {
 			//afficher que filename n'existe pas
 			return false;
+		}
+			catch(IOException io) {
+				return false;
 		}
 		
 		return true;
