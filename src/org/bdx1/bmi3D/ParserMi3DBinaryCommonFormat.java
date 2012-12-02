@@ -1,5 +1,6 @@
 package org.bdx1.bmi3D;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,8 +8,7 @@ import java.io.FileOutputStream;
 
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Mask;
-
-import com.pixelmed.dicom.TagFromName;
+import org.bdx1.diams.model.Slice;
 
 
 public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
@@ -30,14 +30,16 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 		boolean skeletonflag = false; //le skeleton si vous l'avez
 		boolean informationflag = (!examen.getPatientInfos().isEmpty());
 		
-		//Complèter ces 3 valeurs
-		byte width = 1;
-		byte heigth = 1;
-		byte depth = 1;
+		Slice slice = examen.getSlice(0);
+		
+		byte width = (byte)slice.getImage().getWidth();
+		byte heigth = (byte)slice.getImage().getHeight();
+		byte depth = (byte) (examen.getNumberOfSlices() + 1);
 		
 		float resolutionX = default_resolution;
 		float resolutionY = default_resolution;
 		float resolutionZ = default_resolution;
+		
 		
 		try {
 			FileOutputStream fos = new FileOutputStream(new File(filename));
@@ -86,6 +88,17 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
 				/*besoin de manufacturer
 				*/
+				String s = "Patient Name";
+				addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
+				addFieldIntoBuf("Slice Number", String.valueOf(examen.getNumberOfSlices()), buf);
+				
+				String[] resolutions = {"scan resolution", "pixel resolution x", "pixel resolution x"};
+				for (String is : resolutions) {
+					buf.write((byte) (is.length() + 1));
+					for (byte b : is.getBytes())
+						buf.write(b);
+					buf.write((byte) default_resolution);
+				}
 				
 				fos.write(buf.toByteArray());
 			}
