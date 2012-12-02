@@ -1,6 +1,5 @@
 package org.bdx1.bmi3D;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +24,7 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 		filename = filename.trim();
 		filename += extension;
 		
-		boolean dataflag = (!examen.getStudyInfos().isEmpty());
+		boolean dataflag = false;
 		boolean volumeflag = (examen.getMask() == null); //il me faut le masque
 		boolean skeletonflag = false; //le skeleton si vous l'avez
 		boolean informationflag = (!examen.getPatientInfos().isEmpty());
@@ -92,6 +91,9 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 				addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
 				addFieldIntoBuf("Slice Number", String.valueOf(examen.getNumberOfSlices()), buf);
 				
+				buf.write("manufacturer".getBytes());
+				buf.write(0);
+				
 				String[] resolutions = {"scan resolution", "pixel resolution x", "pixel resolution x"};
 				for (String is : resolutions) {
 					buf.write((byte) (is.length() + 1));
@@ -102,7 +104,6 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 				
 				fos.write(buf.toByteArray());
 			}
-	
 		} catch(FileNotFoundException f) {
 			//afficher que filename n'existe pas
 			return false;
