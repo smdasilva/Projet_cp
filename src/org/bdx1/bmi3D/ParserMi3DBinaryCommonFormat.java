@@ -1,19 +1,14 @@
 package org.bdx1.bmi3D;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.LinkedList;
 
-import org.bdx1.commons.ExternalStorage;
 import org.bdx1.diams.model.Examen;
+import org.bdx1.diams.model.Mask;
+
+import com.pixelmed.dicom.TagFromName;
 
 
 public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
@@ -31,7 +26,7 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 		filename += extension;
 		
 		boolean dataflag = (!examen.getStudyInfos().isEmpty());
-		boolean volumeflag = examen.getMask() == null; //il me faut le masque
+		boolean volumeflag = (examen.getMask() == null); //il me faut le masque
 		boolean skeletonflag = false; //le skeleton si vous l'avez
 		boolean informationflag = (!examen.getPatientInfos().isEmpty());
 		
@@ -61,28 +56,40 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 			buf.write((byte) resolutionY);
 			buf.write((byte) resolutionZ);
 			
-			if (volumeflag)
-				//besoin du mask
-			if(skeletonflag) {
-			//il me faut le skeleton
+			if (volumeflag) {
+				Mask mask = examen.getMask();
+				byte[][] bmiMask = new byte[width][heigth];
+				for (int i = 0 ;i < width; i++)
+					for (int j = 0 ;j < heigth; j++)
+						bmiMask[i][j] = booleanTbyte(mask.getPixel(i, j));
+				for( byte[] tb : bmiMask)
+					buf.write(tb);
 			}
+			
+			if(skeletonflag) { 
+				//write the skeleton into BMI format
+			}	
 			if(informationflag) {
 				buf.write((byte) examen.getPatientInfos().size());
 				//ici corriger les clés pour récupérer les infos du patients
-				String[] patients_infos_titles = { "patient_id", "patient_birthday", "patient_age",
-				"patient_sex", "patient_size" , "patient_weight"};
-				for (String s : patients_infos_titles)
-					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
 				
-				String[] study_data = { "study_date", "study_time", "study_description"};
+				String[] patients_infos_titles = {"Patient ID","Patient birthday", "Patient age",
+				"Patient sex", "Patient size" , "Patient weight", "Image position patient",
+				"Image orientation patient"};
+				for (String s : patients_infos_titles) {
+					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
+				}
+				
+				String[] study_data = { "Study data","Study date", "Study time", "Study description",
+				"High bit", "Intercept", "Slope", "Window center", "Window width", "Slice thickness", "WindowCenterWidthExplanation"};
 				for (String s : patients_infos_titles)
 					addFieldIntoBuf(s, examen.getPatientInfos().get(s), buf);
-				/*besoin de highbit, intercept, slope, window-center, slice thickness,
-					window-center width exploration
+				/*besoin de manufacturer
 				*/
+				
 				fos.write(buf.toByteArray());
 			}
-			
+	
 		} catch(FileNotFoundException f) {
 			//afficher que filename n'existe pas
 			return false;
