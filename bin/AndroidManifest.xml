@@ -26,7 +26,6 @@
         </activity>
         <activity
             android:name="ImageActivity"
-            android:configChanges="orientation"
             android:label="@string/title_activity_image" >
         </activity>
     </application>

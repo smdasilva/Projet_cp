@@ -7,9 +7,12 @@ import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Slice;
 import org.bdx1.diams.views.DiamsImageView;
 import org.bdx1.diams.views.DrawView;
+import org.bdx1.diams.views.VerticalSeekBar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,7 +74,7 @@ public class ImageActivity extends Activity {
         centerText = (TextView) findViewById(R.id.centerSliderText);
         widthText = (TextView) findViewById(R.id.widthSliderText);
         centerSlider = (SeekBar) findViewById(R.id.centerSlider);
-        widthSlider = (SeekBar) findViewById(R.id.widthSlider);
+        widthSlider = (SeekBar) findViewById(R.id.widthSlider);   
         switchButton = (ImageButton) findViewById(R.id.modeButton);
         drawThicknessButton = (ImageButton) findViewById(R.id.drawThicknessButton);
         drawEraseButton = (ImageButton) findViewById(R.id.drawEraseButton);
@@ -154,6 +157,8 @@ public class ImageActivity extends Activity {
         zoomSlider.setProgress(100);
         centerSlider.setProgress(windowCenter);
         widthSlider.setProgress(windowWidth);
+        
+        
         presetsSpinner.setAdapter(new ArrayAdapter<HounsfieldPresets>(this, android.R.layout.simple_spinner_item, HounsfieldPresets.values()));
         presetsSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -170,7 +175,26 @@ public class ImageActivity extends Activity {
         sliceInc = (Button) findViewById(R.id.sliceInc);
         sliceDec = (Button) findViewById(R.id.sliceDec);
         sliceText = (TextView) findViewById(R.id.sliceText);
-        sliceText.setText("Slice "+(app.getCurrentSliceIndex()+1)+"/"+app.getCurrentExamen().getNumberOfSlices());
+        sliceText.setText("Slice "+(app.getCurrentSliceIndex()+1)+"/"+app.getCurrentExamen().getNumberOfSlices());    
+        
+        final Object data = getLastNonConfigurationInstance();
+        if (data != null) {
+        	final State state = (State) data;
+        	zoomSlider.setProgress(state.zoom);
+        	imageView.updateScale(state.zoom/100f);
+        	widthSlider.setProgress(state.width);
+        	changeWindowWidth(state.width);    
+        	centerSlider.setProgress(state.center);
+        	changeWindowCenter(state.center);
+        	drawView.setBitmap(state.bitmap);
+        	currentState = (state.currentState)?states.DRAW:states.DRAG;
+        	changeModeButtonImage();
+        	lineThickness = (state.lineThickness)?thickness.BIG:thickness.SMALL;
+        	changeThicknessButtonImage();
+        	drawingMode = (state.drawingMode)?scrub.TRACE:scrub.ERASE;
+        	changeDrawEraseButtonImage();
+        }
+
     }
 
     @Override
@@ -301,4 +325,39 @@ public class ImageActivity extends Activity {
         changeWindowWidth(preset.getWidth());
     }
     
+    @Override
+    public Object onRetainNonConfigurationInstance() {    	
+    	return new State(zoomSlider.getProgress(),widthSlider.getProgress(),centerSlider.getProgress(),drawView.getBitmap(),(currentState == states.DRAG)?false:true,(lineThickness == thickness.SMALL)?false:true,(drawingMode == scrub.ERASE)?false:true);
+    }
+
+}
+
+class State {
+	public int zoom = 100;
+	public int width = 50;
+	public int center = 0;
+	public Bitmap bitmap = null;
+	public boolean currentState = false; // 0 = DRAG, 1 = DRAW
+	public boolean lineThickness = false; // 0 = SMALL, 1 = BIG
+	public boolean drawingMode = false; // 0 = TRACE, 1 = ERASE
+	
+	State(int zoom, int width, int center, Bitmap bitmap, boolean currentState, boolean lineThickness, boolean drawingMode) {
+		this.zoom = zoom;
+		this.width = width;
+		this.center = center;
+		this.bitmap = bitmap;
+		this.currentState = currentState;
+		this.lineThickness = lineThickness;
+		this.drawingMode = drawingMode;
+	}
+	
+	void updateState(int zoom, int width, int center, Bitmap bitmap, boolean currentState, boolean lineThickness, boolean drawingMode) {
+		this.zoom = zoom;
+		this.width = width;
+		this.center = center;
+		this.bitmap = bitmap;
+		this.currentState = currentState;
+		this.lineThickness = lineThickness;
+		this.drawingMode = drawingMode;
+	}
 }

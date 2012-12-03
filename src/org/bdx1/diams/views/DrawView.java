@@ -28,6 +28,15 @@ public class DrawView extends ImageView implements OnTouchListener {
     private Paint   mPaint;   
     Bitmap bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ALPHA_8);
     Mask mask = new InfiniteMask(512,512);
+    
+    public void setBitmap(Bitmap bitmap) {
+    	this.bitmap = bitmap;
+    	mCanvas.setBitmap(this.bitmap);
+    }
+    
+    public Bitmap getBitmap() {
+    	return this.bitmap;
+    }
 
 
     public DrawView(Context context) {
