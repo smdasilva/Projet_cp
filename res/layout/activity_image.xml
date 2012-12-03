@@ -1,0 +1,177 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="ImageActivity" >
+
+    <org.bdx1.diams.views.DiamsImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="58dp" />
+
+    <org.bdx1.diams.views.DrawView
+        android:id="@+id/drawView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="58dp"
+        android:visibility="gone" />
+
+    <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:content="@+id/content"
+        android:handle="@+id/handle" >
+
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Hounsfield controls" />
+
+        <RelativeLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/black"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/centerSliderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Center :"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/blue" />
+
+            <SeekBar
+                android:id="@+id/centerSlider"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
+                android:layout_toRightOf="@id/centerSliderText"
+                android:max="4096" />
+
+            <TextView
+                android:id="@+id/widthSliderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false"
+                android:layout_below="@id/centerSlider"
+                android:text="Width :"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/blue" />
+
+            <SeekBar
+                android:id="@+id/widthSlider"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false"
+                android:layout_below="@id/centerSlider"
+                android:layout_toRightOf="@id/widthSliderText"
+                android:max="512" />
+
+            <Spinner
+                android:id="@+id/hounfieldPresets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/widthSlider"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+    </SlidingDrawer>
+
+    <TextView
+        android:id="@+id/sliceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/sliceInc"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/sliceText"
+        android:onClick="incrementSlice"
+        android:text=">" />
+
+    <Button
+        android:id="@+id/sliceDec"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/sliceText"
+        android:onClick="decrementSlice"
+        android:text="&lt;" />
+
+    <SeekBar
+        android:id="@+id/zoomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/sliceInc"
+        android:max="400" />
+
+    <ImageButton
+        android:id="@+id/modeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sliceDec"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/sliceDec"
+        android:contentDescription="@string/drag"
+        android:onClick="switchMode"
+        android:src="@drawable/ic_menu_move" />
+
+
+
+    <LinearLayout
+        android:id="@+id/drawButtonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sliceDec"
+        android:layout_toRightOf="@id/sliceInc" >
+
+
+
+
+        <ImageButton
+            android:id="@+id/drawEraseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/zoomBar"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/sliceInc"
+            android:layout_weight="1"
+            android:onClick="switchDrawErase"
+            android:src="@drawable/ic_menu_pen" />
+
+
+
+
+
+        <ImageButton
+            android:id="@+id/drawThicknessButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:onClick="switchThickness"
+            android:src="@drawable/ic_menu_drawthickness" />
+
+    </LinearLayout>
+
+</RelativeLayout>
