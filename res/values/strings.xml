@@ -1,0 +1,14 @@
+<resources>
+
+    <string name="app_name">DIAMS</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">NekoTablet</string>
+    <string name="no_files">No files in the folder.</string>
+    <string name="view_infos">View Infos</string>
+    <string name="title_activity_image">ImageActivity</string>
+    <string name="show_infos">Show Infos</string>
+    <string name="drag">mode drag</string>
+    <string name="draw">mode draw</string>
+
+</resources>

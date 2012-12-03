@@ -1,0 +1,177 @@
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="ImageActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.bdx1.diams.views.DiamsImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="45dp" />
+
+    <org.bdx1.diams.views.DrawView
+        android:id="@+id/drawView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="45dp"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/modeButton"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sliceDec"
+        android:layout_margin="0dp"
+        android:contentDescription="@string/drag"
+        android:onClick="switchMode"
+        android:src="@drawable/ic_menu_move" />
+
+    <Button
+        android:id="@+id/sliceDec"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/modeButton"
+        android:onClick="decrementSlice"
+        android:text="&lt;" />
+
+    <TextView
+        android:id="@+id/sliceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/sliceDec"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/sliceInc"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/sliceText"
+        android:onClick="incrementSlice"
+        android:text=">" />
+
+    <LinearLayout
+        android:id="@+id/drawButtonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sliceInc"
+        android:layout_toRightOf="@id/sliceInc" >
+
+        <ImageButton
+            android:id="@+id/drawEraseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/zoomBar"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/sliceInc"
+            android:onClick="switchDrawErase"
+            android:src="@drawable/ic_menu_pen" />
+
+        <ImageButton
+            android:id="@+id/drawThicknessButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:onClick="switchThickness"
+            android:src="@drawable/ic_menu_drawthickness" />
+    </LinearLayout>
+  <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignLeft="@+id/sliceInc"
+        android:content="@+id/content"
+        android:handle="@+id/handle"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/handle"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="225dp" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="top"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Hounsfield controls" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="180dp"
+            android:layout_height="fill_parent"
+            android:background="@color/black"
+            android:focusable="true"
+            android:gravity="left" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/centerSliderText"
+                    android:layout_width="55dp"
+                    android:layout_height="36dp"
+                    android:text="Center:"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/blue" />
+
+                <org.bdx1.diams.views.VerticalSeekBar
+                    android:id="@+id/centerSlider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:max="4096" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/widthSliderText"
+                    android:layout_width="55dp"
+                    android:layout_height="36dp"
+                    android:text="Width:"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/blue" />
+
+                <org.bdx1.diams.views.VerticalSeekBar
+                    android:id="@+id/widthSlider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:max="512" />
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/hounfieldPresets"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:minWidth="75dp" />
+        </LinearLayout>
+    </SlidingDrawer>
+
+    <org.bdx1.diams.views.VerticalSeekBar
+        android:id="@+id/zoomBar"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/imageView"
+        android:max="400" />
+
+</RelativeLayout>

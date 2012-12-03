@@ -1,0 +1,5 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/show_infos"
+        android:title="@string/show_infos"
+        android:orderInCategory="100" android:enabled="true" android:visible="true"/>
+</menu>
