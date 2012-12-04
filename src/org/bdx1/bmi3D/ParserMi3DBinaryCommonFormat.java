@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Mask;
@@ -41,12 +42,11 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 		float resolutionY = default_resolution;
 		float resolutionZ = default_resolution;
 
-
+		DataOutputStream dos = null;
 		try {
 			FileOutputStream fos = new FileOutputStream(new File(filename));
-			//ByteArrayOutputStream buf = new ByteArrayOutputStream();
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			DataOutputStream dos = new DataOutputStream(bos);
+			dos = new DataOutputStream(bos);
 
 			//Header
 			dos.writeBoolean(dataflag);
@@ -54,7 +54,6 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 			dos.writeBoolean(skeletonflag);
 			dos.writeBoolean(informationflag);
 
-			dos.writeInt(width);
 			dos.writeInt(width);
 			dos.writeInt(heigth);
 			dos.writeInt(depth);
@@ -73,43 +72,39 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 				//write the skeleton into BMI format
 			}	
 			if(informationflag) {
-				dos.writeInt(examen.getPatientInfos().size());
+				Map<String,String> patientInfos = examen.getPatientInfos();
+				Map<String,String> studyInfos = examen.getStudyInfos();
+				
+				dos.writeInt(patientInfos.size());
 				//ici corriger les clés pour récupérer les infos du patients
 
-				String[] patients_infos_titles = {"Patient ID","Patient birthday", "Patient age",
-						"Patient sex", "Patient size" , "Patient weight", "Image position patient",
-				"Image orientation patient"};
-				for (String s : patients_infos_titles) {
-					addFieldIntoBuf(s, examen.getPatientInfos().get(s), dos);
+				
+				for (String s : patientInfos.keySet()) {
+					addFieldIntoBuf(s, patientInfos.get(s), dos);
 				}
 
-				String[] study_data = { "Study data","Study date", "Study time", "Study description",
-						"High bit", "Intercept", "Slope", "Window center", "Window width", "Slice thickness", "WindowCenterWidthExplanation"};
-				for (String s : patients_infos_titles)
-					addFieldIntoBuf(s, examen.getPatientInfos().get(s), dos);
+				
+				for (String s : studyInfos.keySet())
+					addFieldIntoBuf(s, studyInfos.get(s), dos);
 				/*besoin de manufacturer
 				 */
 
-				for (String s : study_data)
-					addFieldIntoBuf(s, examen.getPatientInfos().get(s), dos);
 
 				String s = "Patient Name";
-				addFieldIntoBuf(s, examen.getPatientInfos().get(s), dos);
+				addFieldIntoBuf(s, patientInfos.get(s), dos);
 				addFieldIntoBuf("Slice Number", String.valueOf(examen.getNumberOfSlices()), dos);
 
 				dos.writeBytes("manufacturer");
 				dos.writeInt(0);
 
-				String[] resolutions = {"scan resolution", "pixel resolution x", "pixel resolution x"};
+				String[] resolutions = {"scan resolution", "pixel resolution x", "pixel resolution y"};
 				for (String is : resolutions) {
 					dos.writeInt(is.length() + 1);
 					dos.writeBytes(is);
 					dos.writeFloat(default_resolution);
 				}
 
-				fos.close();
-				bos.close();
-				dos.close();
+				
 			}
 		} catch(FileNotFoundException f) {
 			//afficher que filename n'existe pas
@@ -117,6 +112,14 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 		}
 		catch(IOException io) {
 			return false;
+		}
+		finally {
+			try {
+				dos.flush();
+				dos.close();
+			} catch (IOException e) {
+				return false;
+			}
 		}
 
 		return true;

@@ -2,6 +2,7 @@ package org.bdx1.diams;
 
 import java.util.Map;
 
+import org.bdx1.bmi3D.ParserMi3DBinaryCommonFormat;
 import org.bdx1.diams.image.HounsfieldPresets;
 import org.bdx1.diams.model.Examen;
 import org.bdx1.diams.model.Slice;
@@ -11,6 +12,7 @@ import org.bdx1.diams.views.DrawView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -185,6 +187,10 @@ public class ImageActivity extends Activity {
         case R.id.show_infos:
             showInfos();
             return true;
+        case R.id.save_bmi:
+        	new ParserMi3DBinaryCommonFormat().save(
+        			Environment.getExternalStorageDirectory()+"/tmp.", app.getCurrentExamen());
+        	return true;
         default :
             return super.onOptionsItemSelected(item);    
         }
