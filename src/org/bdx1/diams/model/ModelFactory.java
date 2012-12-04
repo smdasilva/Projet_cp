@@ -22,4 +22,8 @@ public interface ModelFactory {
      */
     public Examen makeExamen(File studyFile);
 
+    public Image makeImage(File sourceFile);
+    
+    public Mask makeMask(Image img);
+
 }

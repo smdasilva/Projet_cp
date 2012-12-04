@@ -10,5 +10,6 @@
     <string name="show_infos">Show Infos</string>
     <string name="drag">mode drag</string>
     <string name="draw">mode draw</string>
+    <string name="save_bmi">Save as BMI3D</string>
 
 </resources>
