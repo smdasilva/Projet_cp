@@ -25,7 +25,7 @@ public class ImageTest {
 
     @Before
     public void setUp() throws Exception {
-        img = DefaultModelFactory.makeImage(dicom);
+        img = new DefaultModelFactory().makeImage(dicom);
     }
 
     @After

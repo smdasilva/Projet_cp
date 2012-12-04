@@ -2,4 +2,5 @@
     <item android:id="@+id/show_infos"
         android:title="@string/show_infos"
         android:orderInCategory="100" android:enabled="true" android:visible="true"/>
+    <item android:id="@+id/save_bmi" android:title="@string/save_bmi" android:titleCondensed="@string/save_bmi" android:visible="true" android:enabled="true"></item>
 </menu>

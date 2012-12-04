@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 
+import org.bdx1.diams.Factory;
 import org.bdx1.diams.parsing.InformationProvider;
 import org.bdx1.diams.parsing.InformationProviderManager;
 
@@ -15,12 +16,14 @@ public class BaseSlice implements Slice {
 
     private Map<String, String> sliceInfos;
     private Image img;
+    private Mask mask;
     
     BaseSlice(File sourceFile) {
         InformationProvider dicomProv = InformationProviderManager.getDicomProvider();
         dicomProv.read(sourceFile);
         sliceInfos = dicomProv.getSliceInfos();
-        img = DefaultModelFactory.makeImage(sourceFile);
+        img = Factory.MODEL_FACTORY.makeImage(sourceFile);
+        mask = Factory.MODEL_FACTORY.makeMask(img);
     }
     
     public Map<String, String> getInfos() {
@@ -39,5 +42,9 @@ public class BaseSlice implements Slice {
 
     public Image getImage() {
         return img;
+    }
+
+    public Mask getMask() {
+        return mask;
     }
 }
