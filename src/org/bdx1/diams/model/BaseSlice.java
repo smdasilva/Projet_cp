@@ -45,6 +45,6 @@ public class BaseSlice implements Slice {
     }
 
     public Mask getMask() {
-        return null;
+        return mask;
     }
 }
