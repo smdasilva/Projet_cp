@@ -20,7 +20,7 @@ public class ParserMi3DBinaryCommonFormat implements ParserMi3DBinary {
 	private String extension;
 
 	public ParserMi3DBinaryCommonFormat() {
-		extension = "bmi";
+		extension = "nmi3D";
 	}
 
 	public boolean save(String filename, Examen examen) {
