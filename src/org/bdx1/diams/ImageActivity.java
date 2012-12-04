@@ -126,7 +126,7 @@ public class ImageActivity extends Activity {
 				switchThickness(v);
 				changeThicknessButtonImage();
 				// Bad hack :'(
-				drawView.setTraceThickness((lineThickness.ordinal()+2)*2);
+				drawView.setTraceThickness((lineThickness.ordinal()+2)*3);
 			}
 		});
         

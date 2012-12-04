@@ -54,17 +54,6 @@ public class DrawView extends ImageView implements OnTouchListener {
         init();
     }
     
-    public void save() {
-    	for(int i = 0; i<bitmap.getWidth(); i++){
-            for(int j = 0; j<bitmap.getHeight(); j++){
-            	if(bitmap.getPixel(i, j) != 0) {    
-            		mask.setPixel(i, j, true);
-            	}
-            }
-    	}
-    }
-    	
-    
     private void init() {
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -128,7 +117,6 @@ public class DrawView extends ImageView implements OnTouchListener {
         mCanvas.drawPath(mPath, mPaint);
     }
 
-    
 
 
     public boolean onTouch(View arg0, MotionEvent event) {
@@ -159,9 +147,15 @@ public class DrawView extends ImageView implements OnTouchListener {
 	}
 
 	public void saveMask(int currentSliceIndex) {
-		// TODO Auto-generated method stub
-		
+		for(int i = 0; i<bitmap.getWidth(); i++){
+            for(int j = 0; j<bitmap.getHeight(); j++){
+            	if(bitmap.getPixel(i, j) != 0) {    
+            		mask.setPixel(i, j, true);
+            	}
+            }
+    	}
 	}
+
 
 	public void setTraceThickness(int lineThickness) {
 		mPaint.setStrokeWidth(lineThickness);
